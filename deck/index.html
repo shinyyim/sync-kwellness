@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYNC — K-wellness Companion</title>
+<meta name="description" content="SYNC reads your skin, picks the K-beauty products that answer it, runs the routine, and shows what moved.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box }
+  html, body { margin:0; height:100%; background:#14170f; font-family:'DM Sans', Arial, sans-serif; overflow:hidden }
+  #stage { position:fixed; left:0; right:0; top:0; bottom:52px; overflow:hidden }
+  #canvas { position:absolute; left:50%; top:50%; width:1920px; height:1080px; transform-origin:center center; box-shadow:0 30px 120px #0008 }
+  .sl { position:absolute; left:0; top:0; width:1920px; height:1080px; display:none }
+  .sl.on { display:block }
+  .sl > section { position:absolute; left:0; top:0; width:1920px; height:1080px; overflow:hidden }
+  .sl .fit { position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:0 0 }
+  .sl h1, .sl h2, .sl h3, .sl p, .sl ul, .sl ol, .sl table { margin:0 }
+  .sl ul, .sl ol { padding-left:28px }
+  .sl table { border-collapse:collapse; width:100% }
+  .sl td, .sl th { border-bottom:1px solid #00000018 }
+  .sl aside { display:none }
+  #bar { position:fixed; left:0; right:0; bottom:0; height:52px; display:flex; align-items:center; gap:14px;
+         padding:0 20px; color:#faf9f6; font-size:13px; letter-spacing:1.4px; text-transform:uppercase; background:#14170f }
+  #bar button { background:none; border:1px solid #ffffff44; color:#faf9f6; border-radius:30px; padding:6px 14px; font:inherit; letter-spacing:1.2px; cursor:pointer }
+  #bar button:hover { background:#ffffff1a }
+  #count { margin-left:auto; font-variant-numeric:tabular-nums }
+</style>
+</head><body>
+<div id="stage"><div id="canvas">
+<div class="sl"><section style="background:#d5ff46"><div class="fit" style="background:#d5ff46">
+  
+  <div id="a17ffb90" style="position:absolute; top:282px; left:128px; width:892px; height:484px; display:flex; flex-direction:column; gap:24px">
+    <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:4px; text-transform:uppercase; color:#3a4034">K-wellness companion · September 2026</p>
+    <h1 style="font-family:Rubik, Arial, sans-serif; font-size:180px; font-weight:700; line-height:0.9; letter-spacing:-8px; color:#1c211b">SYNC</h1>
+    <h2 style="width:760px; font-family:Rubik, Arial, sans-serif; font-size:60px; font-weight:600; line-height:1.06; letter-spacing:-2px; color:#1c211b">Your personal K-wellness companion.</h2>
+    <p style="width:740px; font-family:'DM Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#33392d">Starting with K-beauty. Growing with your daily care.</p>
+  </div>
+  <img src="hero.png" alt="The SYNC companion on the demo's home screen, saying: hey, I'm SYNC, show me your skin, tell me your budget, I'll find what's missing" id="b714e600" style="position:absolute; top:194px; left:1104px; width:720px; height:830px; object-fit:contain">
+  <aside>The companion on the right is the live demo, not a mockup.</aside>
+</div><p id="e1-1ftwghs" style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#3a4034">Reads your skin · picks what answers it · runs the routine · shows what moved</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="display:flex; flex-direction:column; gap:48px; justify-content:space-between; padding:128px 128px 160px; background:#faf9f6">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">01 · Pain point</p>
+  <h2 style="width:1300px; font-family:Rubik, Arial, sans-serif; font-size:84px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">“🤯 So many K-beauty products. Which one is right for me?”</h2>
+  <div style="display:flex; flex-direction:row; gap:32px">
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#6c7266">Time</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:34px; line-height:1.3; color:#1c211b">Too many products to compare, in a category that adds more every week.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#6c7266">Confidence</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:34px; line-height:1.3; color:#1c211b">Reviews are someone else's skin. Popularity is not a fit.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:40px; background:#e9e1ff; border:1px solid #d3c7f5; border-radius:20px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#4a3f73">Who</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:34px; line-height:1.3; color:#1c211b">Global K-beauty shoppers who already buy, and want help choosing.</p>
+    </div>
+  </div>
+  
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">SYNC · K-wellness companion · 02 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="background:#faf9f6">
+  
+  <p id="7aad0b4b" style="position:absolute; top:128px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">02 · Problem</p>
+  <h2 id="df47277a" style="position:absolute; top:207.05px; left:128px; width:1400px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">💅🏻 Too many products.&nbsp;<br>Too much work to find a personal fit.</h2>
+  <div id="0641ecf6" style="position:absolute; top:413px; left:128px; width:1664px; height:263px; display:flex; flex-direction:row; gap:32px">
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.15; color:#1c211b">Product overload</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#474c42">Hundreds of brands, dozens of formats, a new launch every week.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.15; color:#1c211b">Similar promises</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#474c42">Every label claims the same things. Reading the ingredients is work.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.15; color:#1c211b">No feedback</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#474c42">You buy, you use it, and nothing tells you whether it worked.</p>
+    </div>
+  </div>
+  <p id="3e183b4a" style="position:absolute; top:725px; left:128px; width:1500px; font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.4; color:#474c42">The cost is not only money. It is products left unused, and no way to tell a good buy from a lucky one.</p>
+</div><p id="e1-1gp23mk" style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">Core problem hypothesis: abundance makes choosing harder · SYNC · 03 / 16</p></section></div>
+<div class="sl"><section style="background:#1c211b"><div class="fit" style="display:flex; flex-direction:column; gap:56px; padding:128px 128px 160px; background:#1c211b">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#d5ff46">03 · Solution</p>
+  <h2 style="width:1480px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#faf9f6">👾 A companion that reads, picks, runs the routine, then checks its own work.</h2>
+  <div style="display:flex; flex-direction:row; gap:20px; align-items:center">
+    <div style="display:flex; flex-direction:column; gap:10px; flex:1; padding:36px; background:#262c24; border:1px solid #3c4438; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:36px; font-weight:600; color:#d5ff46">Read</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#d6dacf">Your face, 15 axes, region by region.</p>
+    </div>
+    <x-shape kind="arrow-right" style="width:56px; height:28px; background:#d5ff46"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:10px; flex:1; padding:36px; background:#262c24; border:1px solid #3c4438; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:36px; font-weight:600; color:#d5ff46">Match</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#d6dacf">The few products that answer it, inside your budget.</p>
+    </div>
+    <x-shape kind="arrow-right" style="width:56px; height:28px; background:#d5ff46"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:10px; flex:1; padding:36px; background:#262c24; border:1px solid #3c4438; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:36px; font-weight:600; color:#d5ff46">Run</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#d6dacf">Morning and night, ticked off as you go.</p>
+    </div>
+    <x-shape kind="arrow-right" style="width:56px; height:28px; background:#d5ff46"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:10px; flex:1; padding:36px; background:#d5ff46; border:1px solid #d5ff46; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:36px; font-weight:600; color:#1c211b">Verify</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#2a3125">The next read shows what moved, and what didn't.</p>
+    </div>
+  </div>
+  <p style="width:1500px; font-family:'DM Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#bfc5b8">The loop is the product. Matching is the first turn of it, not the whole thing.</p>
+  
+  <aside>Most tools stop after the match. The fourth step is what earns the daily relationship, and the data.</aside>
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#8b9184">SYNC · K-wellness companion · 04 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="display:flex; flex-direction:column; gap:44px; padding:128px 128px 160px; background:#faf9f6">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">04 · How it works</p>
+  <h2 style="width:1400px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">🪞 Every pick can be traced back to your own face.</h2>
+  <div style="display:flex; flex-direction:row; gap:28px">
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:36px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#6c7266">The read</p>
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:44px; font-weight:600; line-height:1.1; color:#1c211b">Hydration 34</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#474c42">15 axes, 11 face regions, one score. Dry patches on both cheeks.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:36px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#6c7266">The evidence</p>
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:44px; font-weight:600; line-height:1.1; color:#1c211b">Panthenol, #6 of 33</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#474c42">Named on that product's own label, in label order. Checkable.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:36px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#6c7266">The refusal</p>
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:44px; font-weight:600; line-height:1.1; color:#1c211b">Left out, on purpose</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#474c42">“Barrier 47. A retinoid makes that worse before better.”</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:36px; background:#d5ff46; border:1px solid #c6f031; border-radius:20px">
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#42491f">The proof</p>
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:44px; font-weight:600; line-height:1.1; color:#1c211b">34 → 42</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#2a3125">Two weeks later, the same read, side by side with the last one.</p>
+    </div>
+  </div>
+  <p style="width:1520px; font-family:'DM Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#474c42">A retailer's scanner cannot say “don't buy this”. A companion paid to keep you can.</p>
+  
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">Examples are real output from the working demo · SYNC · 05 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="display:flex; flex-direction:column; gap:44px; padding:128px 128px 160px; background:#faf9f6">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">05 · Product demo</p>
+  <h2 style="width:1400px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">🌐 Built and running today, in the browser.</h2>
+  <div style="display:flex; flex-direction:row; gap:32px">
+    <div style="display:flex; flex-direction:column; gap:18px; flex:1; padding:44px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#42491f">Working today</h3>
+      <ul style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.5; color:#2a3125">
+        <li>Live face read: 15 axes, 11 regions, a spoken walk-through</li>
+        <li>Picks traced to the label, with what was left out and why</li>
+        <li>Daily routine with check-offs, streak and adherence</li>
+        <li>Second read shown as a change: hydration 34 → 42</li>
+        <li>Talk or type to change budget, focus or what you already own</li>
+      </ul>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:18px; flex:1; padding:44px; background:#f1f2ec; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#6c7266">Next to build</h3>
+      <ul style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.5; color:#474c42">
+        <li>Cross-brand catalogue with live pricing and stock</li>
+        <li>Accounts, so the memory follows you across devices</li>
+        <li>Checkout handed to retail partners</li>
+        <li>Outcome reports back to brands, with consent</li>
+      </ul>
+    </div>
+  </div>
+  
+  <aside>Open the demo here if there is time: read, picks, the routine, then the two-week re-scan.</aside>
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">Read runs on a vision model · movement between reads is shown, not predicted · SYNC · 06 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="display:flex; flex-direction:column; gap:44px; padding:128px 128px 160px; background:#faf9f6">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">06 · Competitive position</p>
+  <h2 style="width:1420px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">💃🏻 Everyone can scan a face. Almost nobody can say “buy nothing”.</h2>
+  <table style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; color:#1c211b">
+    <tr style="background:#1c211b"><th style="padding:22px; width:22%; color:#faf9f6">Who</th><th style="padding:22px; width:40%; color:#faf9f6">Scope, as they describe it</th><th style="padding:22px; width:38%; color:#faf9f6">Where SYNC differs</th></tr>
+    <tr><td style="padding:22px">SkinBliss</td><td style="padding:22px">Face scans, shelf analysis, routines, progress tracking</td><td style="padding:22px">Evidence per pick down to the ingredient's place on the label</td></tr>
+    <tr style="background:#f1f2ec"><td style="padding:22px">Perfect Corp</td><td style="padding:22px">B2B skin analysis and beauty chat, sold to brands and retailers</td><td style="padding:22px">Paid by the shopper's side, so it can rule a product out</td></tr>
+    <tr><td style="padding:22px">Retailer scanners</td><td style="padding:22px">Free analysis on a product page, inside one catalogue</td><td style="padding:22px">Cross-brand, and it verifies the result on the next read</td></tr>
+    <tr style="background:#d5ff46"><td style="padding:22px">SYNC</td><td style="padding:22px">Read, pick, run the daily routine, verify the change</td><td style="padding:22px">The loop, not the scan, is the product</td></tr>
+  </table>
+  
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">Provider-described capabilities from their own product pages, not independent tests · SYNC · 07 / 16</p></section></div>
+<div class="sl"><section style="background:#e9e1ff"><div class="fit" style="display:flex; flex-direction:column; gap:52px; padding:128px 128px 160px; background:#e9e1ff">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#4a3f73">07 · Market</p>
+  <h2 style="width:1380px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">💄 K-beauty demand is growing, and it is growing outside Korea.</h2>
+  <div style="display:flex; flex-direction:row; gap:32px">
+    <div style="display:flex; flex-direction:column; gap:10px; flex:1; padding:44px; background:#faf9f6; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:104px; font-weight:700; line-height:1; letter-spacing:-4px; color:#1c211b">+53%</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.3; color:#474c42">Global annual sales growth</p>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">NIQ · July 2026</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; flex:1; padding:44px; background:#faf9f6; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:104px; font-weight:700; line-height:1; letter-spacing:-4px; color:#1c211b">+131%</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.3; color:#474c42">Global sales growth over two years</p>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">NIQ · July 2026</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; flex:1; padding:44px; background:#1c211b; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:104px; font-weight:700; line-height:1; letter-spacing:-4px; color:#d5ff46">$2B</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.3; color:#d6dacf">US K-beauty sales</p>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#8b9184">NIQ · October 2025</p>
+    </div>
+  </div>
+  <p style="width:1520px; font-family:'DM Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#3d3559">The opening: start where the demand already is, then keep the relationship after the purchase.</p>
+  
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#6a5f92">Category evidence. The US figure is a different scope and date. SYNC revenue requires validation · 08 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="display:flex; flex-direction:column; gap:40px; padding:128px 128px 160px; background:#faf9f6">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">08 · Why us, why now</p>
+  <h2 style="width:1480px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">K-beauty is how people arrive. The loop is why they stay.</h2>
+  <div style="display:flex; flex-direction:row; gap:20px">
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:28px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#6c7266">01 · Arrive</p>
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:32px; font-weight:600; line-height:1.12; color:#1c211b">A crowded aisle</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; line-height:1.38; color:#474c42">Newcomers land on a catalogue, not a decision. The read turns 89 products into three, with the reason attached.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:28px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#6c7266">02 · Stay</p>
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:32px; font-weight:600; line-height:1.12; color:#1c211b">A habit, not a scan</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; line-height:1.38; color:#474c42">Daily check-offs and the next read are the reason to open it again. That is where the memory comes from.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:28px; background:#e9e1ff; border:1px solid #d3c7f5; border-radius:20px">
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#4a3f73">03 · The question</p>
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:32px; font-weight:600; line-height:1.12; color:#1c211b">Kept, but unchanged</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; line-height:1.38; color:#3d3559">Then it is not the product. It is sleep, water, food — and we hold both halves of that sentence.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:28px; background:#d5ff46; border:1px solid #c6f031; border-radius:20px">
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#42491f">04 · Expand</p>
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:32px; font-weight:600; line-height:1.12; color:#1c211b">Same loop, new inputs</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; line-height:1.38; color:#2a3125">K-wellness is not a market we announce. It is the next question our own data already asks.</p>
+    </div>
+  </div>
+  
+  <aside>The line to say over the cards: a growing market lifts every competitor in it — the loop is ours. The read gets people in, the routine keeps them, and the second read earns the right to ask about the rest of their day. Then: the market growing is a tailwind for every competitor too. Our claim is narrower — we are the only one who sees the routine and the result, so we are the only one who can say when the problem stopped being a product.</aside>
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">An arc, not a roadmap: each step only opens once the one before it works · SYNC · 09 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="display:flex; flex-direction:column; gap:44px; padding:128px 128px 160px; background:#faf9f6">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">09 · Business model</p>
+  <h2 style="width:1400px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">💸 Free to use. Paid when a pick is worth buying.</h2>
+  <div style="display:flex; flex-direction:row; gap:32px">
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; color:#1c211b">Free companion</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#474c42">Reads, routine and daily check-ins cost nothing. Retail partners hold stock, delivery and returns.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#d5ff46; border:1px solid #c6f031; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; color:#1c211b">Commission on a sale</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#2a3125">$45 order × 8% = $3.60 gross. Three orders a year is $10.80 a buyer.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; color:#1c211b">Later: outcome reports</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#474c42">With consent, brands learn what people kept using and what changed. Nobody else has that.</p>
+    </div>
+  </div>
+  <p style="width:1520px; font-family:'DM Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#474c42">The honest constraint: at $10.80 a buyer a year, acquisition has to stay cheap. That is why the pilot runs on creator links and why the routine, not the scan, is the hook.</p>
+  
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">Commission rate is an assumption, not a signed rate · SYNC · 10 / 16</p></section></div>
+<div class="sl"><section style="background:#FAF9F6"><div class="fit" style="background:#FAF9F6; color:#1C211B; font-family:'DM Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+  <p style="font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6C7266">10 · Financial scenarios</p>
+  <h2 style="font-family:'Rubik', Arial, sans-serif; font-size:72px; font-weight:600; letter-spacing:-2px; line-height:1.08; width:1400px">What it takes for the commission to matter.</h2>
+  <table style="font-family:'DM Sans', Arial, sans-serif; font-size:32px; color:#1C211B">
+    <tr style="background:#1C211B">
+      <th style="width:34%; color:#FAF9F6; text-align:left; padding:24px">Annual buyers</th>
+      <th style="width:33%; color:#FAF9F6; text-align:right">Annual GMV</th>
+      <th style="width:33%; color:#FAF9F6; text-align:right">Gross commission</th>
+    </tr>
+    <tr><td style="text-align:left">10,000</td><td style="text-align:right">$1.35M</td><td style="text-align:right">$108K</td></tr>
+    <tr style="background:#F1F2EC"><td style="text-align:left">100,000</td><td style="text-align:right">$13.5M</td><td style="text-align:right">$1.08M</td></tr>
+    <tr style="background:#D5FF46"><td style="text-align:left">1,000,000</td><td style="text-align:right">$135M</td><td style="text-align:right">$10.8M</td></tr>
+  </table>
+  <p style="font-size:30px; line-height:1.4; color:#474C42; width:1520px">Assumptions: 3 orders per buyer per year, $45 an order, 8% commission. $10.80 gross per buyer per year, before every cost.</p>
+  
+</div><p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#82877C">Sensitivity scenarios only. No buyer count here is a forecast or current traction · SYNC · 11 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="display:flex; flex-direction:column; gap:40px; padding:128px 128px 160px; background:#faf9f6">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">11 · Impact</p>
+  <h2 style="width:1560px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">The waste isn't the money. It's the half-used bottles.</h2>
+  <div style="display:flex; flex-direction:row; gap:28px">
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:36px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:88px; font-weight:700; letter-spacing:-3px; line-height:1; color:#1c211b">49%</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.3; color:#474c42">own skincare left unopened for over a year</p>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:22px; color:#82877c">HK Consumer Council survey</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:36px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:88px; font-weight:700; letter-spacing:-3px; line-height:1; color:#1c211b">27%</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.3; color:#474c42">abandon a product because it wasn't right for their skin</p>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:22px; color:#82877c">The Body Shop, 2,000 UK adults</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:36px; background:#d5ff46; border:1px solid #c6f031; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:88px; font-weight:700; letter-spacing:-3px; line-height:1; color:#1c211b">£1bn</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.3; color:#2a3125">of skincare sitting unused in UK homes alone</p>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:22px; color:#42491f">The Body Shop, 2022</p>
+    </div>
+  </div>
+  <div style="display:flex; flex-direction:row; gap:28px">
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:36px; background:#1c211b; border-radius:20px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#d5ff46">For the person</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#d6dacf">Buy less, use it, find out whether it worked. The number we hold ourselves to is products still in use at 60 days.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:36px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#6c7266">For the category</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#474c42">The first honest feedback loop: what people kept using, and what moved. Brands price and launch without it today.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:36px; background:#e9e1ff; border:1px solid #d3c7f5; border-radius:20px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#4a3f73">For the market</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#3d3559">People who would have bounced off a catalogue start a routine instead — and the same loop carries them from K-beauty into the rest of their care.</p>
+    </div>
+  </div>
+  
+  <aside>People are not short of products, they are short of a reason to trust one. Fewer, kept and checked is the impact for the person; the feedback loop is the impact for everyone else; and it is also how the K-beauty entry point turns into daily K-wellness.</aside>
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">Category surveys, not SYNC results. Our own outcomes are still to be measured in the pilot · SYNC · 12 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="display:flex; flex-direction:column; gap:44px; padding:128px 128px 160px; background:#faf9f6">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">12 · Validation plan</p>
+  <h2 style="width:1400px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">What we run next, and what would stop us.</h2>
+  <div style="display:flex; flex-direction:row; gap:32px">
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; color:#1c211b">15 interviews</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#474c42">Walk through a real recent purchase. What was decided, and on what.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; color:#1c211b">50-person pilot</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#474c42">One care goal, 30 days, two reads each. Creator links bring the first group in.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px; flex:1; padding:40px; background:#d5ff46; border:1px solid #c6f031; border-radius:20px">
+      <h3 style="font-family:Rubik, Arial, sans-serif; font-size:40px; font-weight:600; color:#1c211b">Go / no-go</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; color:#2a3125">Return visits in week three, half the routine still used, read cost under a dollar.</p>
+    </div>
+  </div>
+  <p style="width:1520px; font-family:'DM Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#474c42">The number that decides it is not the scan. It is whether anyone comes back for the second read.</p>
+  
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c">Proposed US pilot: one care goal, 30–50 reviewed SKUs. No results yet · SYNC · 13 / 16</p></section></div>
+<div class="sl"><section style="background:#faf9f6"><div class="fit" style="background:#faf9f6">
+  
+  <p id="8ef165b6" style="position:absolute; top:128px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6c7266">13 · Team</p>
+  <h2 id="fd93f6c6" style="position:absolute; top:206px; left:128px; width:1420px; font-family:Rubik, Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.08; letter-spacing:-2px; color:#1c211b">👩🏻‍💻 Solo founder, building with agents.&nbsp;<br></h2>
+  <p id="79b1140d" style="position:absolute; top:741.5px; left:128.01px; width:1520px; font-family:'DM Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#474c42">Small team is the point: the loop was designed and built by the same person who will run the pilot.</p>
+  <div id="323e6130" style="position:absolute; top:50%; left:128px; width:573px; height:315px; display:flex; flex-direction:column; gap:14px; padding:44px; background:#1c211b; border-radius:20px; transform:translateY(-50%)">
+    <h3 style="font-family:Rubik, Arial, sans-serif; font-size:44px; font-weight:600; color:#d5ff46">👩‍💻 Sohyun Yim</h3>
+    <p style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.4; color:#d6dacf">Concept, design and build. Every surface in this deck was made in-house, not commissioned.</p>
+  </div>
+  <div id="061098ed" style="position:absolute; top:382.5px; right:127.99px; width:1059px; height:315px; display:flex; flex-direction:column; gap:18px; padding:44px; background:#ffffff; border:1px solid #dcddd5; border-radius:20px">
+    <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#6c7266">How the work gets done</h3>
+    <ul style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.5; color:#474c42">
+      <li>One person sets the direction; agents do the volume</li>
+      <li>A read, a catalogue and a daily loop, in five months</li>
+      <li>Every fix ships the same day it is found</li>
+      <li>Trying something costs near nothing, which is what a 50-person pilot needs</li>
+    </ul>
+  </div>
+</div><p id="e1-1982ado" style="position:absolute; bottom:71.55px; left:50%; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#82877c; transform:translateX(-50%)">SYNC · K-wellness companion · 14 / 16</p></section></div>
+<div class="sl"><section style="background:#1c211b"><div class="fit" style="display:flex; flex-direction:column; gap:48px; justify-content:space-between; padding:128px 128px 160px; background:#1c211b">
+  <p style="font-family:'DM Sans', Arial, sans-serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#d5ff46">14 · Vision</p>
+  <h2 style="width:1552px; font-family:Rubik, Arial, sans-serif; font-size:96px; font-weight:600; line-height:1.05; letter-spacing:-3px; color:#faf9f6">🚀 Starts with K-beauty. Grows into the K-WELLNESS you do every day.</h2>
+  <div style="display:flex; flex-direction:row; gap:18px; align-items:center">
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:32px; background:#262c24; border-radius:16px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; font-weight:600; color:#faf9f6">Skin</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:26px; line-height:1.3; color:#aeb5a6">Today</p>
+    </div>
+    <x-shape kind="arrow-right" style="width:44px; height:22px; background:#d5ff46"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:32px; background:#262c24; border-radius:16px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; font-weight:600; color:#faf9f6">Body and scalp</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:26px; line-height:1.3; color:#aeb5a6">Same loop, more surfaces</p>
+    </div>
+    <x-shape kind="arrow-right" style="width:44px; height:22px; background:#d5ff46"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:32px; background:#262c24; border-radius:16px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; font-weight:600; color:#faf9f6">Sleep, food, movement</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:26px; line-height:1.3; color:#aeb5a6">What the skin was telling you about</p>
+    </div>
+    <x-shape kind="arrow-right" style="width:44px; height:22px; background:#d5ff46"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1; padding:32px; background:#d5ff46; border-radius:16px">
+      <h3 style="font-family:'DM Sans', Arial, sans-serif; font-size:30px; font-weight:600; color:#1c211b">In a room</h3>
+      <p style="font-family:'DM Sans', Arial, sans-serif; font-size:26px; line-height:1.3; color:#2a3125">The mirror knows you before you speak</p>
+    </div>
+  </div>
+  <p style="width:1520px; font-family:'DM Sans', Arial, sans-serif; font-size:34px; line-height:1.4; color:#bfc5b8">The loop asks the next question for us: routine kept, skin unchanged — then it isn't the product, it's sleep, water, food.</p>
+  
+</div><p style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'DM Sans', Arial, sans-serif; font-size:24px; color:#8b9184">Proposed direction · SYNC · 15 / 16</p></section></div>
+<div class="sl"><section style="background:#F1F2EC"><div class="fit" style="background:#F1F2EC; color:#1C211B; font-family:'DM Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+  <p style="font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#6C7266">15 · Sources and assumptions</p>
+  <h2 style="font-family:'Rubik', Arial, sans-serif; font-size:64px; font-weight:600; letter-spacing:-2px; line-height:1.1; width:1400px">Where each number comes from, and what it does not prove.</h2>
+  <table style="font-family:'DM Sans', Arial, sans-serif; font-size:26px; color:#1C211B">
+    <tr style="background:#1C211B">
+      <th style="width:16%; color:#FAF9F6; text-align:left; padding:20px">Slide</th>
+      <th style="width:34%; color:#FAF9F6; text-align:left">Source</th>
+      <th style="width:50%; color:#FAF9F6; text-align:left">What it covers</th>
+    </tr>
+    <tr><td style="text-align:left">Market</td><td>NIQ · Global K-beauty release · July 2026</td><td>Global sales growth. Different scope and date from the US figure.</td></tr>
+    <tr style="background:#FAF9F6"><td style="text-align:left">Market</td><td>NIQ · US K-beauty report · October 2025</td><td>US category sales. Category size, not an addressable market for SYNC.</td></tr>
+    <tr><td style="text-align:left">Competition</td><td>SkinBliss, Perfect Corp · official product pages</td><td>Provider-described capability. Not independent performance tests.</td></tr>
+    <tr style="background:#FAF9F6"><td style="text-align:left">Product</td><td>SYNC demo · September 2026</td><td>Read, picks, routine and read-to-read change, all running. The two-week re-scan in the demo is simulated and labelled.</td></tr>
+    <tr><td style="text-align:left">Catalogue</td><td>Olive Young Global · crawled 13 April 2026</td><td>89 products: price, volume, full ingredient list, usage. Prices are that day's snapshot.</td></tr>
+    <tr style="background:#FAF9F6"><td style="text-align:left">Model</td><td>SYNC assumptions</td><td>$45 order, 8% commission, 3 orders a year. No signed retail agreement yet.</td></tr>
+  </table>
+  
+</div><p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#82877C">SYNC · K-wellness companion · 16 / 16</p></section></div>
+</div></div>
+<div id="bar">
+  <button id="prev">&#8592;</button>
+  <button id="next">&#8594;</button>
+  <button id="full">Fullscreen</button>
+  <span>SYNC &middot; K-wellness companion</span>
+  <span id="count"></span>
+</div>
+<script>
+  var slides = [].slice.call(document.querySelectorAll('.sl'));
+  var i = 0;
+  function fit() {
+    var s = Math.min((innerWidth - 40) / 1920, (innerHeight - 52 - 40) / 1080);
+    document.getElementById('canvas').style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('on', k === i); });
+    document.getElementById('count').textContent = (i + 1) + ' / ' + slides.length;
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+  addEventListener('resize', fit);
+  addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') show(i + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(i - 1);
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+    if (e.key === 'f') document.documentElement.requestFullscreen();
+  });
+  document.getElementById('prev').onclick = function () { show(i - 1); };
+  document.getElementById('next').onclick = function () { show(i + 1); };
+  document.getElementById('full').onclick = function () { document.documentElement.requestFullscreen(); };
+  document.getElementById('stage').onclick = function (e) { show(i + (e.clientX > innerWidth / 2 ? 1 : -1)); };
+  // the deck viewer shrinks an over-full slide; do the same here, keeping the footer line where it belongs
+  function autofit() {
+    slides.forEach(function (sl) {
+      var was = sl.classList.contains('on'); sl.classList.add('on');
+      var box = sl.querySelector('.fit');
+      box.style.transform = '';
+      var kids = [].slice.call(box.children);
+      var flow = kids.filter(function (c) { return c.tagName !== 'ASIDE' && getComputedStyle(c).position !== 'absolute'; });
+      var bottom = 0; flow.forEach(function (c) { bottom = Math.max(bottom, c.offsetTop + c.offsetHeight); });
+      var need = bottom + parseFloat(getComputedStyle(box).paddingBottom || 0);
+      if (need > 960) box.style.transform = 'scale(' + (960 / need).toFixed(4) + ')';
+      if (!was) sl.classList.remove('on');
+    });
+  }
+  fit(); autofit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(autofit);
+  show((parseInt((location.hash || '#1').slice(1), 10) || 1) - 1);
+  window.report = function () {
+    return slides.map(function (sl, i) {
+      var was = sl.classList.contains('on'); sl.classList.add('on');
+      var box = sl.querySelector('.fit');
+      var kids = [].slice.call(box.children);
+      var flow = kids.filter(function (c) { return c.tagName !== 'ASIDE' && getComputedStyle(c).position !== 'absolute'; });
+      var bottom = 0; flow.forEach(function (c) { bottom = Math.max(bottom, c.offsetTop + c.offsetHeight); });
+      var need = Math.round(bottom + parseFloat(getComputedStyle(box).paddingBottom || 0));
+      if (!was) sl.classList.remove('on');
+      return (i + 1) + ':' + box.parentElement.id + ':' + need;
+    }).join(' ');
+  };
+</script>
+</body></html>

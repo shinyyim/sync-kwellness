@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYNC — Demo film</title>
+<meta name="description" content="SYNC reads your skin, picks the K-beauty products that answer it, runs the routine, and shows what moved.">
+<meta property="og:title" content="SYNC — Your K-wellness companion">
+<meta property="og:description" content="Reads your skin · picks what answers it · runs the routine · shows what moved">
+<meta property="og:image" content="poster.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23d5ff46'/%3E%3Ctext x='9' y='30' font-family='Arial' font-weight='bold' font-size='29'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1c211b; --paper:#faf9f6; --lime:#d5ff46; --line:#1c211b26; --muted:#5b5f55 }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:'DM Sans', Arial, sans-serif; line-height:1.5 }
+  header, main, footer { max-width:1180px; margin:0 auto; padding:0 24px }
+  header { display:flex; align-items:center; gap:20px; height:88px; border-bottom:1px solid var(--line); max-width:none; padding:0 4vw }
+  .logo { font-size:38px; font-weight:800; letter-spacing:-3px; line-height:1 }
+  .logo span { font-size:22px; vertical-align:top; margin-left:5px; letter-spacing:0 }
+  .eyebrow { font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted) }
+  header .eyebrow { margin-left:auto }
+  h1 { font-family:'Rubik', Arial, sans-serif; font-size:clamp(38px,6vw,76px); font-weight:700; letter-spacing:-2.5px; line-height:1.03; margin:48px 0 14px }
+  h1 em { font-family:Georgia, serif; font-style:italic; font-weight:400 }
+  .lede { font-size:clamp(17px,2.2vw,22px); color:#3c4039; max-width:760px; margin:0 0 30px }
+  .player { position:relative; border-radius:22px; overflow:hidden; background:#0d0f0d; box-shadow:0 24px 70px #00000022 }
+  video { display:block; width:100%; height:auto }
+  .meta { display:flex; flex-wrap:wrap; gap:10px 26px; margin:18px 0 44px; font-size:14px; color:var(--muted) }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-bottom:44px }
+  .card { border:1px solid var(--line); border-radius:16px; padding:22px }
+  .card h2 { font-family:'Rubik', Arial, sans-serif; font-size:19px; font-weight:600; margin:0 0 6px }
+  .card p { margin:0; font-size:15px; color:#474c42 }
+  .card.lime { background:var(--lime); border-color:var(--lime) }
+  .links { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:56px }
+  .btn { display:inline-flex; align-items:center; gap:10px; border:1px solid var(--ink); border-radius:40px; padding:13px 22px; font-size:15px; text-decoration:none; color:var(--ink) }
+  .btn.solid { background:var(--ink); color:var(--paper) }
+  footer { border-top:1px solid var(--line); padding-top:22px; padding-bottom:60px; font-size:13px; color:var(--muted) }
+  footer p { margin:6px 0 }
+  @media (prefers-color-scheme: dark) { :root { } }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">sync<span>✳</span></span>
+  <span class="eyebrow">Your K-wellness companion</span>
+</header>
+
+<main>
+  <h1>A minute with <em>SYNC.</em></h1>
+  <p class="lede">It reads your skin, picks the few K-beauty products that answer what it read, runs the routine with you, and on the next read shows what actually moved.</p>
+
+  <div class="player">
+    <video controls playsinline preload="metadata" poster="poster.jpg">
+      <source src="sync-demo.mp4" type="video/mp4">
+      Your browser can't play this video. <a href="sync-demo.mp4">Download it instead.</a>
+    </video>
+  </div>
+  <div class="meta">
+    <span>48 seconds · sound on</span>
+    <span>Recorded from the working demo, September 2026</span>
+  </div>
+
+  <div class="cards">
+    <div class="card"><h2>Read</h2><p>Your face, 15 axes, region by region, with what it sees written next to each one.</p></div>
+    <div class="card"><h2>Match</h2><p>The few products that answer it, inside your budget — and what was left out, with the reason.</p></div>
+    <div class="card"><h2>Run</h2><p>The routine as a morning and night checklist you tick off.</p></div>
+    <div class="card lime"><h2>Verify</h2><p>The next read is shown against the last one: hydration 34 → 42.</p></div>
+  </div>
+
+  <div class="links">
+    <a class="btn solid" href="https://sync-kwellness-deck.vercel.app" target="_blank" rel="noopener">See the deck ↗</a>
+    <a class="btn" href="sync-demo.mp4" download>Download the film ↓</a>
+  </div>
+</main>
+
+<footer>
+  <p>The read describes what the camera sees in that light. It is not a diagnosis.</p>
+  <p>Products and prices: Olive Young Global, crawled 13 April 2026. The two-week re-scan shown in the demo is simulated and labelled.</p>
+  <p>SYNC · concept and build by Sohyun Yim · September 2026</p>
+</footer>
+</body>
+</html>
