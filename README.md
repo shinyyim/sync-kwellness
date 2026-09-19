@@ -4,7 +4,9 @@ SYNC reads your skin from the camera, picks the few K-beauty products that answe
 
 Everything here was built on **19 September 2026** for a pitch competition.
 
-**Live:** [the deck](https://sync-kwellness-deck.vercel.app) · [the film](https://sync-demo-film.vercel.app)
+**Live:** [try the demo](https://sync-demo-black.vercel.app) · [the deck](https://sync-kwellness-deck.vercel.app) · [the film](https://sync-demo-film.vercel.app)
+
+> The hosted demo runs without the read service, so the skin read is a labelled sample (**SAMPLE · NOT MEASURED**) and the voice is the browser's own. Everything else — the picks and their evidence, the daily routine, the read-to-read change, the chat — behaves exactly as it does with the service attached.
 
 ---
 
@@ -30,13 +32,13 @@ serve.sh  runs the demo and the read service together
 | `data/` | `oy_catalog.json` (89 products with ingredient facts) and their images |
 | `assets/` | the companion, the sample face |
 
-Run it:
+Run it locally:
 
 ```sh
 python3 -m http.server 4173 --directory web    # then open http://localhost:4173 in Chrome
 ```
 
-No build step. Chrome, because the voice input uses its speech recognition.
+No build step. Chrome, because the voice input uses its speech recognition. Hosted copy: **https://sync-demo-black.vercel.app**
 
 ### The read service (not in this repo)
 
