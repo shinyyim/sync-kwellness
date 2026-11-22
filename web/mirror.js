@@ -423,7 +423,7 @@ async function briefing(read, regions) {
   const out = { lines: Object.fromEntries(regions.map(r => [r, briefLocal(read, r)])), close: closeLocal(read) };
   const facts = regions.map(r => `- ${r}: observed "${observed(read, r) || 'nothing noted'}"; ${REGION_AXES[r].filter(a => s[a] != null).map(a => `${AXIS_WORD[a]} ${s[a]} (${status(s[a])})`).join(', ')}`).join('\n');
   const picks = state.items.map(([p, role]) => `${p.brand} ${p.name} (${ROLE_NOUN[role]})`).join('; ') || 'none';
-  const sys = `You are SYNC, a K-wellness companion, walking one person through their skin read out loud, one face region at a time, while each region is zoomed in on screen.
+  const sys = `You are Doona, K-SYNC’s K-beauty companion, walking one person through their skin read out loud, one face region at a time, while each region is zoomed in on screen.
 Voice: a trusted older friend who knows skin. Warm, direct, concrete, a little opinionated. Not a teacher, not customer service. English only.
 Return ONLY JSON, no code fences: {"regions": {"<region key>": "<line>"}, "close": "<line>"}
 Each region line: ONE spoken sentence, 8 to 20 words. Say what you see there and what it means for them. Mention a number only when that axis is out of sync or re-syncing. Vary the openings. Never say left or right (the screen is mirrored). Don't repeat the region name word for word every time.
@@ -508,7 +508,7 @@ async function pickLines(items) {
     return `${i + 1}. ${p.brand} ${p.name} ($${p.price_usd.toFixed(2)}), role: ${ROLE_NOUN[role]}; ${whereItGoes(p, role, items)}; when: ${role === 'sunscreen' ? 'AM' : e.when || 'AM and PM'}
    answers: ${t && t.axis ? `${AXIS_WORD[t.axis]}${t.value != null ? ' ' + t.value : ''}` : 'daily protection'}; evidence on its label: ${ev.map(a => `${a.inci} (#${a.position} of ${a.of}: ${a.does})`).join('; ') || '-'}
    what it is: ${e.what || '-'}; how to use: ${(e.how_to_use || []).join(' ')}${e.caution ? '; caution: ' + e.caution : ''}`; }).join('\n');
-  const sys = `You are SYNC, a K-wellness companion, talking one person through the products you picked for them, out loud, one at a time, while each product is highlighted on screen.
+  const sys = `You are Doona, K-SYNC’s K-beauty companion, talking one person through the products you picked for them, out loud, one at a time, while each product is highlighted on screen.
 Voice: a trusted older friend who knows skin. Warm, direct, concrete. Not salesy, not a teacher. English only.
 Return ONLY JSON, no code fences: {"items": [one line per product, in order], "close": string}
 Each line: 2 or 3 spoken sentences, 25 to 40 words, in this order: (1) open with the brand and what it is, (2) why it's for THEM: say their read with its number (e.g. "your hydration's at 34") and the one ingredient that answers it, (3) when and where it goes in the routine. Don't read out prices. Say "number 6 on the label" style positions at most once.

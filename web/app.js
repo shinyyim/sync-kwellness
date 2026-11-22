@@ -334,7 +334,7 @@ function agentSystem() {
   ].join('\n') : 'No read yet. Suggest the scan if it would help.';
   const picks = state.items.map(([p, role, t]) => { const e = p.enriched || {}; return `- ${p.brand} ${p.name}, $${p.price_usd.toFixed(2)} (${role}; ${whereItGoes(p, role, state.items)}) — ${reasonFor(p, role, t)}\n  What it is: ${e.what || '-'}\n  Key ingredients (label position): ${(e.key_actives || []).map(a => `${a.inci} #${a.position}/${a.of} (${a.does})`).join('; ') || '-'}\n  How to use (${e.when || 'AM and PM'}): ${(e.how_to_use || []).join(' ')}${e.caution ? `\n  Caution: ${e.caution}` : ''}`; }).join('\n') || '- none yet';
   const left = state.skipped.map(x => `- ${x.name} — ${x.reason}`).join('\n') || '- none';
-  return `You are SYNC, a K-wellness companion speaking out loud to one person in a live demo. You have no other name.
+  return `You are Doona, K-SYNC’s K-beauty companion, speaking with one person.
 ${state.name ? `The person's name is ${state.name}. Use it now and then, not every reply.` : ''}
 Voice: a trusted older friend who knows skin. Warm, direct, opinionated, concrete. Not a teacher, not customer service.
 Reply ONLY with JSON, no code fences: {"say": string, "set": {"budget": number|null, "focus": "Hydration"|"Comfort"|"Glow"|null, "keepMoisturizer": true|false|null}}
@@ -413,7 +413,7 @@ $('stage').addEventListener('pointermove', e => {
 });
 $('stage').addEventListener('pointerleave', () => $('portrait').style.transform = '');
 $('avatar-touch').onclick = () => say(['Your routine should fit you. Not the other way around.', 'Keep the good stuff. Let’s find what’s missing.', 'Sometimes the right answer is: don’t buy it.'][Math.floor(Math.random() * 3)]);
-$('sound').onclick = () => { unlockAudio(); voice.convo = true; say("Hey, I'm SYNC. Let me look at your skin, then tell me your budget. I'll find what's missing.", true); };
+$('sound').onclick = () => { unlockAudio(); voice.convo = true; say("Hey, I'm Doona. Let me look at your skin, then tell me your budget. I'll find what's missing.", true); };
 /* ── the companion's chat: typing is the main way in, the mic is optional ── */
 const chat = { open: false, mute: false, log: [] };
 function chatAdd(role, text) {
@@ -448,7 +448,13 @@ $('buddy-mic').onclick = toggleConvo;          // speak instead of typing
 $('talk').onclick = () => { chatOpen(true); $('buddy').classList.remove('away'); };
 addEventListener('keydown', e => { if (e.key === 'Escape' && chat.open) chatOpen(false); });
 // the companion follows you once the big one scrolls away
-new IntersectionObserver(([e]) => { $('buddy').classList.toggle('away', e.isIntersecting); }, { threshold: .25 }).observe($('stage'));
+const companionVisibility = new Map();
+const companionObserver = new IntersectionObserver(entries => {
+  for (const entry of entries) companionVisibility.set(entry.target, entry.isIntersecting);
+  $('buddy').classList.toggle('away', [...companionVisibility.values()].some(Boolean));
+}, { threshold: .2 });
+companionObserver.observe($('stage'));
+companionObserver.observe($('meet'));
 
 function syncControls() {
   document.querySelectorAll('[data-concern]').forEach(b => { const a = b.dataset.concern === state.concern; b.classList.toggle('active', a); b.setAttribute('aria-pressed', String(a)); });
