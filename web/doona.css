@@ -163,3 +163,46 @@ body{background:#fffdf9}
  html {scroll-behavior:auto}
  .doona-hero,.room-figure:not(.mesh-ready) img,#room-choices button {animation:none;transition:none}
 }
+
+/* Leave the shelf within one scroll of the avatar, including on small screens. */
+.doona-inside {min-height:88svh;padding-bottom:58px}
+.shelf-jump {position:absolute;bottom:12px;left:50%;translate:-50% 0;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;font-size:14px;white-space:nowrap}
+.shelf-jump:hover {text-decoration:underline}
+#discover {padding-block:clamp(38px,6vw,80px) 40px}
+#discover .ed-head {align-items:center;gap:16px;margin-bottom:20px}
+#discover .ed-head h2 {font-size:clamp(36px,4.4vw,70px);margin:0;letter-spacing:-.065em}
+#discover .ed-head h2 span {color:#e33381}
+.shelf-filters {border-bottom:1px solid #dfd9de;padding:4px 0 10px}
+.shelf-filters summary {width:max-content;cursor:pointer;font-size:14px;font-weight:600;padding:8px 0}
+.shelf-filters .ed-toolbar {border:none;margin:3px 0 0}
+#discover .ed-summary {align-items:center;gap:12px}
+#edit-compare {margin-left:auto}
+.card-ingredient {margin:5px 0 8px;font-size:14px;line-height:1.35;color:#614e5c}
+.ingredient-index {padding:24px 0 12px}
+.ingredient-index h3 {font-size:clamp(24px,2.8vw,38px);letter-spacing:-.055em;margin:0 0 16px}
+#ingredient-links {display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+#ingredient-links button {border:1px solid #d8ccd7;border-radius:14px;background:#f8efef;display:grid;grid-template-columns:66px 1fr;column-gap:12px;align-items:center;text-align:left;padding:12px}
+#ingredient-links button:nth-child(2) {background:#f0edfa}
+#ingredient-links button:nth-child(3) {background:#f2f4dc}
+#ingredient-links img {grid-row:span 2;width:66px;height:66px;border-radius:9px;object-fit:cover}
+#ingredient-links strong {align-self:end;font-size:17px}
+#ingredient-links small {align-self:start;margin-top:3px;font-size:14px;color:#5c4e5a}
+.price-limit {display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:16px 0}
+.price-limit label {display:grid;gap:4px;text-align:left;font-size:14px}
+.price-limit input,.price-limit button {border:1.5px solid var(--doona-ink);padding:10px;border-radius:8px;font-size:16px}
+.price-limit input {width:150px;background:white}
+.price-limit button {background:var(--doona-lime)}
+#scan-dialog {width:min(92vw,440px);max-height:90svh;overflow:auto}
+#scan-dialog h2 {margin-top:0}
+#scan-dialog .scan-view {height:clamp(150px,32svh,290px)}
+#camera-note {font-size:14px;line-height:1.5}
+.scan-options {display:flex;gap:16px;justify-content:center;margin-top:14px}
+.scan-options button {border:0;background:none;text-decoration:underline;text-underline-offset:3px;font-size:14px;padding:6px 2px}
+@media(max-width:720px) {
+  #ingredient-links {grid-template-columns:1fr}
+  #ingredient-links button {grid-template-columns:55px 1fr}
+  #ingredient-links img {width:55px;height:55px}
+  #discover .ed-head {flex-direction:column;align-items:stretch}
+  #discover .ed-search {width:100%}
+  .doona-inside {min-height:90svh}
+}

@@ -745,7 +745,6 @@ $('chat-form').onsubmit = e => { e.preventDefault(); const t = $('message').valu
 document.querySelectorAll('[data-prompt]').forEach(b => b.onclick = () => converse(b.dataset.prompt));
 
 /* ── scan ─────────────────────────────────────────────────────────────── */
-let keepStream = false;   // set when a read hands the camera on to the live tags
 function stopCamera() {
   scanGeneration++;
   if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
@@ -753,30 +752,34 @@ function stopCamera() {
   $('scan-view').classList.remove('scanning'); $('start-scan').disabled = false;
   stopLive();
 }
-$('open-scan').onclick = () => {
+function openSkinCheck() {
+  stopCamera();
   $('scan-status').textContent = 'Camera off';
-  $('scan-info').textContent = 'Turn on your camera, face the light, hold still for a second.';
-  $('camera-note').textContent = 'Three frames go to the SYNC read service. Nothing is stored by this page.';
-  $('camera-button').disabled = false; $('start-scan').disabled = false; $('scan-view').classList.remove('scanning');
-  document.querySelector('.scan-actions').hidden = false;
+  $('camera-note').textContent = 'Scanning sends three camera frames to the analysis service.';
+  $('camera-button').hidden = false; $('camera-button').disabled = false;
+  $('start-scan').hidden = true;
   $('scan-dialog').showModal();
-  if (stream) { $('camera').srcObject = stream; $('camera').hidden = false; $('scan-sample').hidden = true; $('scan-status').textContent = 'Camera on'; $('camera-button').disabled = true; }
-  else $('camera-button').onclick();      // no extra tap — the scan opens looking at you
-};
+}
+$('open-scan').onclick = openSkinCheck;
 $('close-scan').onclick = () => $('scan-dialog').close();
-$('scan-dialog').addEventListener('close', () => { if (keepStream) { keepStream = false; return; } if (!state.read || state.read.sample) stopCamera(); });
-
+$('scan-dialog').addEventListener('close', stopCamera);
 $('camera-button').onclick = async () => {
-  if (!navigator.mediaDevices?.getUserMedia) { $('camera-note').textContent = 'Camera is unavailable here. You’ll get a sample read.'; return; }
-  const gen = scanGeneration; $('camera-button').disabled = true;
+  const gen = scanGeneration;
+  $('camera-button').disabled = true;
   try {
-    const incoming = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } }, audio: false });
-    if (gen !== scanGeneration || !$('scan-dialog').open) { incoming.getTracks().forEach(t => t.stop()); return; }
-    stream = incoming; $('camera').srcObject = stream; $('camera').hidden = false; $('scan-sample').hidden = true;
-    $('scan-status').textContent = 'Camera on';
-  } catch { $('camera-note').textContent = 'Camera access was not available. You’ll get a sample read.'; $('camera-button').disabled = false; }
+    const incoming = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
+    if(gen !== scanGeneration || !$('scan-dialog').open) {incoming.getTracks().forEach(t=>t.stop()); return;}
+    stream = incoming; $('camera').srcObject = incoming;
+    $('camera').hidden = false; $('scan-sample').hidden = true;
+    $('camera-button').hidden = true; $('start-scan').hidden = false;
+    $('scan-status').textContent = 'Center your face';
+  } catch {
+    if(gen !== scanGeneration || !$('scan-dialog').open) return;
+    $('camera-button').disabled = false;
+    $('scan-status').textContent = 'Camera unavailable';
+    $('camera-note').textContent = 'Allow camera access, try the sample, or choose your goal.';
+  }
 };
-
 function grabFrame() {
   const v = $('camera'); if (!stream || !v.videoWidth) return null;
   const s = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight));
@@ -796,42 +799,40 @@ async function analyze(frames) {
 
 $('start-scan').onclick = async () => {
   const gen = scanGeneration;
-  $('scan-view').classList.add('scanning'); $('start-scan').disabled = true; $('camera-button').disabled = true;
-  let read = null, note = '';
-  const frames = [];
-  if (stream) {
-    $('scan-status').textContent = 'Hold still…';
-    for (let i = 0; i < 3; i++) { const f = grabFrame(); if (f) frames.push(f); await new Promise(r => setTimeout(r, 350)); }
+  const active = () => gen === scanGeneration && $('scan-dialog').open;
+  $('start-scan').disabled = true; $('scan-view').classList.add('scanning');
+  $('scan-status').textContent = 'Hold still…';
+  try {
+    const frames = [];
+    for(let i=0;i<3;i++) {
+      if(!active()) return;
+      const frame = grabFrame();
+      if(!frame) throw Error('The camera isn’t ready. Try again in a moment.');
+      frames.push(frame);
+      await new Promise(resolve=>setTimeout(resolve,220));
+    }
+    if(!active()) return;
+    $('scan-status').textContent = 'Finding your focus…';
+    const response = await analyze(frames).catch(()=>{throw Error('Live analysis is unavailable. Try the sample or choose your goal.');});
+    if(!active()) return;
+    if(response.quality?.usable === false) throw Error('Try brighter lighting and face the camera.');
+    const scores = Object.fromEntries(Object.entries(response.scores || {}).filter(([key,entry]) =>
+      Object.hasOwn(AXIS_WEIGHT,key) && Number.isFinite(entry?.value) && entry.value>=0 && entry.value<=100
+    ).map(([key,entry])=>[key,entry.value]));
+    if(!Object.keys(scores).length) throw Error('No usable read. Try again or choose your goal.');
+    finishSkinCheck({scores,sample:false});
+  } catch(error) {
+    if(active()) { $('scan-status').textContent='Scan incomplete'; $('camera-note').textContent=error.message; }
+  } finally {
+    if(active()) { $('start-scan').disabled=false; $('scan-view').classList.remove('scanning'); }
   }
-  if (frames.length) {
-    $('scan-status').textContent = 'Reading · about 10 seconds';
-    try {
-      const r = await analyze(frames);
-      if (r.quality && r.quality.usable === false) note = `Couldn’t get a clear read (${r.quality.reason || 'face not clear'}). This is a sample.`;
-      else read = {
-        sample: false,
-        scores: Object.fromEntries(Object.entries(r.scores).map(([k, v]) => [k, Math.round(v.value)])),
-        regions: r.regions || {}, diagnosis: r.diagnosis, skin_type: r.skin_type, age_range: r.age_range,
-        fitzpatrick: r.fitzpatrick, top_concern: r.top_concern,
-      };
-    } catch { note = 'The read service isn’t reachable. This is a sample.'; }
-  } else note = 'No camera, so this is a sample.';
-  if (gen !== scanGeneration) return;
-  if (!read) read = SAMPLE_READ;
-  state.read = read; state.override = false;
-  state.concern = AXIS_FOCUS[targetAxes()[0].axis] || 'Hydration'; syncControls();
-
-  keepStream = !!stream && !read.sample;
-  $('scan-dialog').close();
-  renderRead(read, read.sample ? 'assets/sample_face.jpg' : frames[frames.length - 1], read.sample ? null : stream);
-  build(false);
-  if (note) toast(note);
-  const sc = syncScore(read.scores), top = targetAxes()[0];
-  voice.history = [];
-  say(`${sc}. You’re ${band(sc).toLowerCase()}. ${capital(AXIS_WORD[top.axis])} is the one asking${top.fix ? '' : ', and even that’s fine'}. I picked for that. Ask me anything.`, true);
-  voice.convo = true;
-  $('read').scrollIntoView({ behavior: 'smooth' });
 };
+function finishSkinCheck(read) {
+  $('scan-dialog').close();
+  document.dispatchEvent(new CustomEvent('skin-check-finished',{detail:read}));
+}
+$('sample-scan').onclick = () => finishSkinCheck(SAMPLE_READ);
+$('skip-scan').onclick = () => finishSkinCheck(null);
 $('read-to-picks').onclick = () => $('routine').scrollIntoView({ behavior: 'smooth' });
 $('read-again').onclick = () => $('open-scan').click();
 $('read-camera-off').onclick = () => { stopCamera(); $('read-camera-off').hidden = true; };

@@ -21,6 +21,7 @@
   const size = p => p.volume && !/[가-힣]/.test(p.volume) ? p.volume : 'See listing';
   const hasFilters = () => category !== 'All' || savedOnly || alternatives ||
     $('edit-search').value || $('edit-skin').value || $('edit-budget').value || $('edit-sort').value !== 'featured';
+  const searchText = p => [p.name,p.brand,...ingredientNames(p),...p.featured_ingredients.map(i=>i.replaceAll('_',' '))].join(' ').toLowerCase();
   function products() {
     const query = $('edit-search').value.trim().toLowerCase();
     const skin = $('edit-skin').value, price = Number($('edit-budget').value);
@@ -28,7 +29,7 @@
       && (!alternatives || (p.slot === alternatives.slot && p.price_usd <= state.budget))
       && (category === 'All' || categories[category].includes(p.slot))
       && (!skin || p.skin_types.includes(skin)) && (!price || p.price_usd <= price)
-      && (!query || [p.name,p.brand,...ingredientNames(p),...p.featured_ingredients.map(i => i.replaceAll('_',' '))].join(' ').toLowerCase().includes(query)));
+      && (!query || searchText(p).includes(query)));
     const sort = $('edit-sort').value;
     const rank = p => featured.includes(p.id) ? featured.indexOf(p.id) : featured.length;
     if (sort === 'low') return matches.sort((a,b) => a.price_usd - b.price_usd);
@@ -43,6 +44,7 @@
     $('edit-count').textContent = alternatives ? list.length + ' alternatives and picks · up to $' + state.budget : list.length + onShelf + (list.length === 1 ? ' product' : ' products');
     $('edit-reset').hidden = !hasFilters();
     document.querySelectorAll('[data-edit-category]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.editCategory === category)));
+    compareButton.hidden = !selected.length;
     compareButton.disabled = selected.length !== 2;
     compareButton.textContent = 'Compare (' + selected.length + '/2)';
     $('edit-more').hidden = list.length <= limit;
@@ -53,6 +55,7 @@
         <div class="ed-visual"><button class="ed-image" data-detail="${esc(p.id)}" aria-label="View ${label}"><img src="data/${esc(p.image)}" loading="lazy" alt=""></button>
         <button class="ed-save" data-save="${esc(p.id)}" aria-label="Save ${label}" aria-pressed="${saved.has(p.id)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-8.5-5.2-8.5-11a4.7 4.7 0 0 1 8.5-2.7A4.7 4.7 0 0 1 20.5 9c0 5.8-8.5 11-8.5 11Z"/></svg></button></div>
         <div class="ed-brand">${esc(p.brand)}</div><h3><button data-detail="${esc(p.id)}">${esc(p.name)}</button></h3>
+        <p class="card-ingredient">${esc(ingredientNames(p).slice(0,2).join(' · ') || categoryName(p))}</p>
         <div class="ed-card-meta"><strong>${money(p.price_usd)}</strong><span>${esc(p.is_set ? 'Set' : categoryName(p))}</span></div>
         <button class="ed-pick" data-pick="${esc(p.id)}" aria-pressed="${active}"><i aria-hidden="true">${active ? '✓' : '+'}</i> Compare</button></article>`;
     };
@@ -132,7 +135,31 @@
     const product = lookup(event.detail);
     if (product) showDetail(product);
   });
-  document.addEventListener('catalog-ready',render);
+  function populateShelf() {
+    render();
+    const notes = [
+      ['Panthenol','Find panthenol on the label.'],
+      ['Niacinamide','Compare niacinamide formulas.'],
+      ['Ceramide NP','Explore ceramide blends.']
+    ];
+    const links = $('ingredient-links'); links.replaceChildren();
+    for(const [name,caption] of notes) {
+      const matches = catalog.filter(p=>searchText(p).includes(name.toLowerCase()));
+      if(!matches.length) continue;
+      const button = document.createElement('button');
+      const art = document.createElement('img');
+      art.alt = ''; art.loading='lazy'; art.src='data/'+matches[0].image;
+      const title=document.createElement('strong'); title.textContent=name;
+      const count=document.createElement('small'); count.textContent=matches.length+' products';
+      button.title=caption; button.append(art,title,count);
+      button.onclick=()=>{
+        reset(); $('edit-search').value=name; refresh(); goShelf();
+        $('edit-search').focus({preventScroll:true});
+      };
+      links.append(button);
+    }
+  }
+  document.addEventListener('catalog-ready',populateShelf);
   document.addEventListener('catalog-error',()=>{$('edit-count').textContent='The catalog could not load. Refresh to try again.';});
-  if(catalog.length) render();
+  if(catalog.length) populateShelf();
 })();

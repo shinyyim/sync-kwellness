@@ -11,6 +11,7 @@
   const room = $('meet'), choices = $('room-choices'), heading = $('room-question');
   const back = $('room-back'), card = $('room-result'), caption = $('room-caption');
   let scene = 'hello', goal, budget, pick, remembered, catalogFailed = false, fromMemory = false;
+  let scanSource = '', scanAxis = null;
   try { remembered = JSON.parse(localStorage.getItem(memoryKey))?.id; } catch {}
   const react = () => room.dispatchEvent(new Event('doona-react'));
 
@@ -38,7 +39,7 @@
     caption.textContent = description;
     caption.hidden = !description;
     back.hidden = next === 'hello';
-    const step = next === 'goal' ? 1 : next === 'budget' ? 2 : 0;
+    const step = next === 'start' ? 1 : next === 'goal' ? 2 : 0;
     $('room-progress').hidden = !step;
     $('room-step').textContent = step ? step + ' of 2' : '';
     $('hello-bubble').hidden = true;
@@ -47,7 +48,7 @@
   }
 
   function hello(focus = true) {
-    goal = budget = pick = null;
+    goal = budget = pick = scanAxis = null; scanSource = '';
     fromMemory = false;
     const last = catalog.find(p => p.id === remembered);
     screen('hello', last ? 'Welcome back.' : 'Hey, I’m ', '', focus);
@@ -58,17 +59,32 @@
       name.append(dot); heading.append(name);
     }
     chip(last ? 'See my pick' : 'Say hi', greet, 'wave', true);
-    if(last) chip('Find a new pick', askGoal);
+    if(last) chip('Find a new pick', startMatch);
   }
 
   function greet() {
     const last = catalog.find(p => p.id === remembered);
-    if(last) {fromMemory = true; pick = last; reveal();} else askGoal();
+    if(last) {fromMemory = true; pick = last; reveal();} else startMatch();
   }
+  function startMatch() {
+    goal = budget = pick = scanAxis = null; scanSource = ''; fromMemory = false;
+    screen('start','How should we match?');
+    chip('Scan my face',openSkinCheck,null,true);
+    chip('Choose my goal',askGoal);
+  }
+  document.addEventListener('skin-check-finished',event=>{
+    if(!event.detail) {askGoal();return;}
+    const top = rankAxes(event.detail.scores)[0];
+    if(!top) {askGoal();return;}
+    scanAxis = top.axis;
+    scanSource = event.detail.sample ? 'Sample scan' : 'Your scan';
+    goal = AXIS_FOCUS[scanAxis];
+    match();
+  });
   function askGoal() {
-    fromMemory = false;
+    scanAxis = null; scanSource = ''; budget = null; fromMemory = false;
     screen('goal', 'Your skin goal?');
-    for(const option of goals) chip(option.label, () => {goal = option.value; askBudget(); moodReaction(goal);}, option.icon);
+    for(const option of goals) chip(option.label, () => {goal = option.value; match(); moodReaction(goal);}, option.icon);
   }
   function moodReaction(value) {
     if(matchMedia('(prefers-reduced-motion: reduce)').matches || $('doona-hello').classList.contains('motion-paused')) return;
@@ -86,8 +102,18 @@
     }
   }
   function askBudget() {
-    screen('budget', 'Your budget?');
-    for(const amount of [20,30,50]) chip('$' + amount + ' or less', () => {budget = amount; match();});
+    screen('budget','Set a price limit');
+    const form = document.createElement('form');
+    form.className = 'price-limit';
+    const label = document.createElement('label'); label.textContent = 'Maximum (USD)';
+    const field = document.createElement('input');
+    field.type='number'; field.min='0.01'; field.step='0.01'; field.required=true;
+    field.inputMode='decimal'; field.value=budget ?? '';
+    const apply = document.createElement('button'); apply.textContent='Apply';
+    form.onsubmit=event=>{event.preventDefault();budget=field.valueAsNumber;match();};
+    label.append(field); form.append(label,apply); card.append(form);
+    chip('Any price',()=>{budget=null;match();});
+
   }
   function match() {
     if(!catalog.length) {
@@ -95,7 +121,9 @@
       if(catalogFailed) chip('Try again', () => location.reload(), null, true);
       return;
     }
-    pick = ranked(['serum','cream'], FOCUS_AXIS[goal]).find(item => item.p.price_usd <= budget)?.p;
+    const axis = scanAxis || FOCUS_AXIS[goal];
+    const slots = AXIS_LEX[axis].slot === 'spot' ? ['spot'] : ['serum','cream'];
+    pick = ranked(slots, axis).find(item => budget === null || item.p.price_usd <= budget)?.p;
     if(!pick) {
       screen('empty', 'Let’s try another budget.', 'My shelf has no match for this combination.');
       chip('Change my budget', askBudget, null, true); return;
@@ -104,9 +132,9 @@
   }
   function reveal() {
     const saved = pick.id === remembered;
-    const active = goal && evidenceFor(pick, FOCUS_AXIS[goal])[0];
+    const active = goal && evidenceFor(pick, scanAxis || FOCUS_AXIS[goal])[0];
     screen('result', fromMemory ? 'Your saved pick.' : 'Your match.',
-      !goal ? '' : goal + ' · $' + budget + ' or less');
+      [scanSource, goal, budget !== null ? 'Up to ' + money(budget) : ''].filter(Boolean).join(' · '));
     const product = document.createElement('button');
     product.type = 'button'; product.className = 'pick-ticket';
     const img = document.createElement('img'); img.alt = ''; img.src = 'data/' + pick.image;
@@ -119,7 +147,7 @@
     product.onclick = inspect; card.append(product);
     if(active) {
       const why = document.createElement('p');
-      why.textContent = 'For ' + goal.toLowerCase() + ', the listing highlights ' + active.inci + '.';
+      why.textContent = 'On the ingredient list: ' + active.inci + ' (No. ' + active.position + ').';
       card.append(why);
     }
     chip(saved ? 'Forget this pick' : 'Remember this pick', () => {
@@ -131,13 +159,15 @@
       } catch {toast('Your browser couldn’t save that change.');}
     }, 'save', !saved);
     chip('See details', inspect);
-    if(!goal) chip('Find a new pick', askGoal);
+    if(goal) chip(budget === null ? 'Set a price limit' : 'Change price limit',askBudget);
+    else chip('Find a new pick',startMatch);
   }
   back.onclick = () => {
     react();
-    if(scene === 'goal' || fromMemory || !goal) hello();
-    else if(scene === 'budget') askGoal();
-    else askBudget();
+    if(scene === 'start' || fromMemory) hello();
+    else if(scene === 'goal' || scanSource && scene !== 'budget' && scene !== 'empty') startMatch();
+    else if(scene === 'budget' || scene === 'empty') {budget=null;match();}
+    else askGoal();
   };
   $('doona-hello').onclick = () => {
     react();
