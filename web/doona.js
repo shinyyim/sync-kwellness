@@ -3,9 +3,9 @@
 (() => {
   const looks = {signature:'Signature', track:'Track star', silver:'Silver lining', denim:'Off duty', beret:'After hours'};
   const goals = [
-    {label:'More hydration', value:'Hydration', icon:'drop'},
-    {label:'Some comfort', value:'Comfort', icon:'heart'},
-    {label:'A little glow', value:'Glow', icon:'spark'}
+    {label:'Hydration', value:'Hydration', icon:'drop'},
+    {label:'Comfort', value:'Comfort', icon:'heart'},
+    {label:'Glow', value:'Glow', icon:'spark'}
   ];
   const memoryKey = 'ksync.doona.lastPick.v1';
   const room = $('meet'), choices = $('room-choices'), heading = $('room-question');
@@ -41,9 +41,7 @@
     const step = next === 'goal' ? 1 : next === 'budget' ? 2 : 0;
     $('room-progress').hidden = !step;
     $('room-step').textContent = step ? step + ' of 2' : '';
-    const lines = {hello:'What’s on your skincare wishlist?',goal:'Pick what feels like you.',budget:'I’ll stick to your budget.',result:'Take a closer look.'};
-    $('hello-bubble').hidden = !lines[next];
-    $('bubble-text').textContent = lines[next] || '';
+    $('hello-bubble').hidden = true;
     $('doona-hello').setAttribute('aria-label', next === 'hello' ? 'Say hi to Doona' : 'Wave to Doona');
     if(focus) heading.focus({preventScroll:true});
   }
@@ -52,7 +50,7 @@
     goal = budget = pick = null;
     fromMemory = false;
     const last = catalog.find(p => p.id === remembered);
-    screen('hello', last ? 'Hey, welcome back.' : 'Hey, I’m ', last ? 'I saved your ' + last.brand + ' pick.' : 'Two quick picks. I’ll find Korean skincare for your skin and budget.', focus);
+    screen('hello', last ? 'Welcome back.' : 'Hey, I’m ', '', focus);
     if(!last) {
       const name = document.createElement('em');
       name.textContent = 'Doona';
@@ -69,7 +67,7 @@
   }
   function askGoal() {
     fromMemory = false;
-    screen('goal', 'What does your skin want today?');
+    screen('goal', 'Your skin goal?');
     for(const option of goals) chip(option.label, () => {goal = option.value; askBudget(); moodReaction(goal);}, option.icon);
   }
   function moodReaction(value) {
@@ -88,7 +86,7 @@
     }
   }
   function askBudget() {
-    screen('budget', 'How much would you like to spend?', goal + ' it is. Let’s find one product that fits.');
+    screen('budget', 'Your budget?');
     for(const amount of [20,30,50]) chip('$' + amount + ' or less', () => {budget = amount; match();});
   }
   function match() {
@@ -107,7 +105,7 @@
   function reveal() {
     const saved = pick.id === remembered;
     const active = goal && evidenceFor(pick, FOCUS_AXIS[goal])[0];
-    screen('result', fromMemory ? 'Here’s your saved pick.' : 'I picked this for you.',
+    screen('result', fromMemory ? 'Your saved pick.' : 'Your match.',
       !goal ? '' : goal + ' · $' + budget + ' or less');
     const product = document.createElement('button');
     product.type = 'button'; product.className = 'pick-ticket';
@@ -176,7 +174,7 @@
   menu.addEventListener('click',event=>{
     const link=event.target.closest('a');
     if(link){showSection(link.hash);if(link.hash==='#meet')hello();}
-    toggleMenu(false);
+    if(link || event.target.closest('#shelf-nav,#routine-nav')) toggleMenu(false);
   });
   document.querySelector('.doona-logo').addEventListener('click',()=>hello());
   document.addEventListener('click',event=>{if(!menu.contains(event.target) && !toggle.contains(event.target))toggleMenu(false);});
