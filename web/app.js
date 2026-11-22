@@ -12,7 +12,8 @@
    inside the budget, with what was ruled out and why. */
 
 const $ = id => document.getElementById(id);
-const API = new URLSearchParams(location.search).get('api') || 'http://localhost:8000';
+const API = new URLSearchParams(location.search).get('api')
+  || (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? 'http://localhost:8000' : '/api');
 
 const state = { concern: 'Hydration', budget: 60, keep: true, read: null, override: false, items: [], skipped: [], selected: new Set() };
 let catalog = [];
@@ -553,6 +554,11 @@ function build(scroll = true) {
       e.target.setAttribute('aria-pressed', String(on));
       totals();
     };
+    const alternatives = document.createElement('button');
+    alternatives.className = 'ed-alternatives';
+    alternatives.textContent = 'Compare alternatives';
+    alternatives.onclick = () => document.dispatchEvent(new CustomEvent('compare-alternatives', { detail: p }));
+    a.append(alternatives);
     $('products').append(a);
   });
 
@@ -767,8 +773,9 @@ $('camera-button').onclick = async () => {
 
 function grabFrame() {
   const v = $('camera'); if (!stream || !v.videoWidth) return null;
-  const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight;
-  c.getContext('2d').drawImage(v, 0, 0);
+  const s = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight));
+  const c = document.createElement('canvas'); c.width = Math.round(v.videoWidth * s); c.height = Math.round(v.videoHeight * s);
+  c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
   return c.toDataURL('image/jpeg', .9);
 }
 
@@ -841,7 +848,7 @@ $('close-bag').onclick = $('back-routine').onclick = () => $('bag-dialog').close
 window.addEventListener('pagehide', () => { stopCamera(); if ('speechSynthesis' in window) speechSynthesis.cancel(); });
 
 /* ── boot ─────────────────────────────────────────────────────────────── */
-fetch('data/oy_catalog.json').then(r => r.json()).then(d => { catalog = d.products; }).catch(() => toast('Couldn’t load the product list. Serve this folder over http, not file://.'));
+fetch('data/oy_catalog.json').then(r => r.json()).then(d => { catalog = d.products; document.dispatchEvent(new Event('catalog-ready')); }).catch(() => { document.dispatchEvent(new Event('catalog-error')); toast('Couldn’t load the product list. Reload to try again.'); });
 syncControls();
 
 if (document.modelContext?.registerTool) {
