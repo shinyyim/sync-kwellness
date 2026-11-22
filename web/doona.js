@@ -1,115 +1,158 @@
 'use strict';
 
 (() => {
-  const looks = {
-    signature: { name: 'Signature', alt: 'in a black blazer with a lime serum dropper', line: 'What’s on your skincare wishlist?' },
-    track: { name: 'Track star', alt: 'in a yellow track jacket with a toner bottle', line: 'A quick routine before you head out?' },
-    silver: { name: 'Silver lining', alt: 'in a silver puffer with a red compact', line: 'What’s your go-to for a glow day?' },
-    denim: { name: 'Off duty', alt: 'in a knit beanie holding a cleansing oil', line: 'Let’s keep today’s routine simple.' },
-    beret: { name: 'After hours', alt: 'in a black beret holding a pink lip tint', line: 'Getting ready for an evening out?' }
-  };
-  const replies = ['Tell me what you already use.', 'Got a budget in mind?', 'Hydration, comfort, or glow?'];
-  const stage = document.querySelector('.doona-stage');
-  const hero = $('meet');
-  const portrait = $('doona-art');
-  const finder = $('match-dialog');
-  const form = $('match-form');
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  let replyIndex = 0;
-  let lastHeroChatTrigger = null;
+  const looks = {signature:'Signature',track:'Track star',silver:'Silver lining',denim:'Off duty',beret:'After hours'};
+  const goals = {Hydration:/hydrat|dry|moisture|dehydrat/i, Comfort:/comfort|sensitiv|sooth|calm|gentle|redness/i, Glow:/glow|bright|dull|uneven/i};
+  const groups = [
+    ['serum',/serum|ampoule/i,['serum']], ['moisturizer',/moisturi[sz]er|cream/i,['cream']],
+    ['sunscreen',/sunscreen|spf|sun care/i,['sunscreen']], ['cleanser',/cleanser|cleansing/i,['cleanse_1','cleanse_2']],
+    ['mask',/mask/i,['mask']], ['pad',/toner pad/i,['pad']]
+  ];
+  const memoryKey='ksync.doona.lastPick.v1';
+  const room=$('meet'), question=$('room-question'), input=$('room-input'), choices=$('room-choices');
+  const cardArea=$('room-result'), context=$('room-context');
+  let visit, phase, remembered=null, catalogError=false;
+  try {remembered=JSON.parse(localStorage.getItem(memoryKey));} catch {}
+  const react=()=>room.dispatchEvent(new Event('doona-react'));
+  const newVisit=()=>({mode:null, goal:null, budget:null, group:null, keep:null, product:null});
 
-  function bounce() {
-    if (!reduceMotion.matches) {
-      portrait.animate([{rotate:'0deg'}, {rotate:'-2.5deg', offset:.35}, {rotate:'1deg', offset:.7}, {rotate:'0deg'}], {duration:470});
+  function say(line, suggestions=[], placeholder='Message Doona…') {
+    question.textContent=line;
+    choices.replaceChildren();
+    for(const [label,action] of suggestions) {
+      const button=document.createElement('button');
+      button.type='button';button.textContent=label;button.onclick=()=>{react();action();};choices.append(button);
     }
+    input.placeholder=placeholder;
+    $('room-restart').hidden=phase==='home';
+    const parts=[visit.goal, visit.group?.[0], visit.budget!=null ? 'Up to '+money(visit.budget).replace(/\.00$/,'') : null].filter(Boolean);
+    context.textContent=parts.join(' · ');context.hidden=!parts.length;
   }
 
+  function home() {
+    visit=newVisit();phase='home';cardArea.replaceChildren();input.value='';
+    const last=catalog.find(p=>p.id===remembered?.id);
+    const actions=[['Pick one for me',()=>start('one')],['Check a product',()=>start('check')],['Build a routine',()=>start('routine')]];
+    if(last) actions.unshift(['Revisit my pick',()=>{visit.product=last;showPick(last);}],['Forget this pick',()=>{remembered=null;try{localStorage.removeItem(memoryKey);}catch{}home();}]);
+    say(last?'Back for your '+last.brand+' pick?':'What can I help you find?',actions,'Try “a hydrating serum under $30”');
+  }
+  function start(mode) {visit=newVisit();visit.mode=mode;cardArea.replaceChildren();advance();}
+  function productCard(p) {
+    const article=document.createElement('div');article.className='room-product';
+    const img=document.createElement('img');img.src='data/'+p.image;img.alt='';
+    const button=document.createElement('button');button.type='button';
+    const brand=document.createElement('small'),name=document.createElement('strong'),price=document.createElement('span');
+    brand.textContent=p.brand;name.textContent=p.name;price.textContent=money(p.price_usd)+(p.is_set?' · set price':'')+' · Apr 2026';
+    button.append(brand,name,price);button.onclick=()=>document.dispatchEvent(new CustomEvent('doona-product',{detail:p.id}));
+    article.append(img,button);cardArea.append(article);
+  }
+  function showPick(p) {
+    phase='result';visit.product=p;cardArea.replaceChildren();
+    productCard(p);
+    const active=visit.goal && evidenceFor(p,FOCUS_AXIS[visit.goal])[0];
+    const explanation=active ? 'For '+visit.goal.toLowerCase()+', the listing highlights '+active.inci+'.' : p.enriched?.what;
+    if(explanation){const note=document.createElement('p');note.className='room-note';note.textContent=explanation;cardArea.append(note);}
+    const acts=[['See product details',()=>document.dispatchEvent(new CustomEvent('doona-product',{detail:p.id}))]];
+    if(remembered?.id!==p.id) acts.push(['Remember this pick',()=>{
+      try{localStorage.setItem(memoryKey,JSON.stringify({id:p.id}));remembered={id:p.id};showPick(p);}
+      catch{toast('Your browser could not save this pick.');}
+    }]);
+    say(remembered?.id===p.id?'I’ve kept this pick for you.':visit.mode==='check'?'Here’s what I found.':'I’d start with this one.',acts,'Ask another question…');
+  }
+  function findProduct(text) {
+    const words=text.toLowerCase().replace(/[^\p{L}\p{N} ]/gu,' ').split(/\s+/).filter(w=>w && !['check','the','a','an','please','product','can','you','for','me','look','up','on','is','this'].includes(w));
+    const list=words.length ? catalog.filter(p=>words.every(w=>(p.brand+' '+p.name).toLowerCase().includes(w))) : [];
+    if(list.length===1) return showPick(list[0]);
+    phase='lookup';
+    say(list.length?'Which one did you mean?':'Which product should I look up?',list.slice(0,4).map(p=>[p.brand+' '+p.name,()=>showPick(p)]),list.length?'Type a more specific name…':words.length?'No match yet. Try a brand or shorter name…':'Type a brand or product name…');
+  }
+  function advance() {
+    cardArea.replaceChildren();
+    if(visit.mode==='check'){phase='lookup';say('Which product should I look up?',[],'Type a brand or product name…');return;}
+    if(!visit.goal){
+      phase='goal';say('What’s your main skin goal?',Object.keys(goals).map(g=>[g,()=>{visit.goal=g;advance();}]),'Hydration, comfort, or glow?');return;
+    }
+    if(visit.budget==null) {
+      phase='budget';say(visit.mode==='routine'?'What’s your total routine budget?':'How much would you like to spend?',[20,30,50].map(b=>['$'+b,()=>{visit.budget=b;advance();}]),'Enter your budget in USD…');return;
+    }
+    if(visit.mode==='routine' && (visit.budget<15 || visit.budget>120)) {
+      visit.budget=null;advance();question.textContent='For this routine, choose $15–$120.';return;
+    }
+    if(visit.mode==='routine' && visit.keep==null){
+      phase='keep';say('Keeping your current moisturizer?',[['Yes, keep mine',()=>{visit.keep=true;advance();}],['I need one',()=>{visit.keep=false;advance();}]],'Yes or no…');return;
+    }
+    if(!catalog.length){
+      phase='waiting';say(catalogError?'The catalog couldn’t load.':'I’m opening the catalog…',catalogError?[['Reload',()=>location.reload()]]:[]);return;
+    }
+    if(visit.mode==='routine'){
+      state.concern=visit.goal;state.override=!!state.read;state.budget=visit.budget;state.keep=visit.keep;
+      syncControls();build(false);phase='result';
+      for(const [p] of state.items) productCard(p);
+      const total=state.items.reduce((n,[p])=>n+p.price_usd,0);
+      say(state.items.length?'Your routine comes to '+money(total)+'.':'No routine fits this budget yet.',
+        state.items.length?[['See routine steps',()=>$('routine').scrollIntoView({behavior:'smooth'})]]:[['Change budget',()=>{visit.budget=null;advance();}]]);return;
+    }
+    const axis=FOCUS_AXIS[visit.goal],slots=visit.group?.[2] || ['serum','cream'];
+    const match=ranked(slots,axis).find(item=>item.p.price_usd<=visit.budget);
+    if(match){showPick(match.p);return;}
+    phase='result';say('I couldn’t find a match at that price.',[['Change budget',()=>{visit.budget=null;advance();}],['Try another category',()=>{visit.group=null;advance();}]]);
+  }
+  function submit(text) {
+    const value=text.trim();if(!value)return;
+    input.value='';react();
+    if(phase==='lookup'){findProduct(value);return;}
+    if(/^(?:check|look up|find the)\b/i.test(value)){start('check');findProduct(value);return;}
+    const goal=Object.entries(goals).find(([,re])=>re.test(value))?.[0];
+    const group=groups.find(([,re])=>re.test(value));
+    const price=value.match(/(?:\$\s*|under\s+|up to\s+|budget(?: of)?\s+)(\d+(?:\.\d{1,2})?)/i) || value.match(/^(\d+(?:\.\d{1,2})?)\s*(?:dollars?|usd)?$/i);
+    if(phase==='result'){
+      cardArea.replaceChildren();
+      if(goal || group || price || /routine/i.test(value)){
+        visit.mode=/routine/i.test(value)?'routine':visit.mode==='routine'?'routine':'one';
+        visit.product=null;
+      } else {visit=newVisit();phase='home';}
+    }
+    if(phase==='home' && !goal && !group && !price && !/routine|pick|recommend/i.test(value)){
+      const knownBrand=catalog.some(p=>value.toLowerCase().includes(p.brand.toLowerCase()));
+      if(knownBrand){visit.mode='check';findProduct(value);return;}
+      phase='clarify';say('What would you like to do with that?',[
+        ['Find a match',()=>start('one')],['Look up that product',()=>{visit.mode='check';findProduct(value);}],
+        ['Talk it through',()=>{chatOpen(true);converse(value);home();}]
+      ]);return;
+    }
+    if(!visit.mode) visit.mode=/routine/i.test(value)?'routine':'one';
+    if(goal)visit.goal=goal;
+    if(group)visit.group=group;
+    if(price)visit.budget=Number(price[1]);
+    if(/(?:already have|keep my|own a).*moisturi[sz]er/i.test(value))visit.keep=true;
+    if(/(?:need|no|don't have).*moisturi[sz]er/i.test(value))visit.keep=false;
+    if(phase==='keep' && /^(yes|yeah|keep|yep)/i.test(value))visit.keep=true;
+    if(phase==='keep' && /^(no|need|nope)/i.test(value))visit.keep=false;
+    advance();
+  }
   function setLook(key) {
-    const look = looks[key];
-    if (!look) return;
-    hero.dataset.look = key;
-    const src = 'assets/doona/' + key + '.webp';
-    for (const img of [portrait, $('match-face'), document.querySelector('#buddy-face img'), document.querySelector('#portrait img')]) img.src = src;
-    portrait.alt = 'Doona ' + look.alt;
-    $('look-name').textContent = look.name;
-    $('doona-line').textContent = look.line;
-    for (const button of document.querySelectorAll('.wardrobe-list button')) button.setAttribute('aria-pressed', String(button.dataset.look === key));
-    replyIndex = 0;
+    if(!Object.hasOwn(looks,key))return;
+    room.dataset.look=key;
+    for(const img of [$('doona-art'),document.querySelector('#buddy-face img'),document.querySelector('#portrait img')])img.src='assets/doona/'+key+'.webp';
+    $('doona-art').alt='Doona in her '+looks[key]+' look';$('look-name').textContent=looks[key];
+    for(const b of document.querySelectorAll('.wardrobe-list button')) b.setAttribute('aria-pressed',String(b.dataset.look===key));
   }
-
-  for (const button of document.querySelectorAll('.wardrobe-list button')) {
-    button.onclick = () => {
-      setLook(button.dataset.look);
-      bounce();
-      try { localStorage.setItem('ksync.doona.look', button.dataset.look); } catch {}
-    };
+  for(const b of document.querySelectorAll('.wardrobe-list button')) b.onclick=()=>{
+    setLook(b.dataset.look);try{localStorage.setItem('ksync.doona.look',b.dataset.look);}catch{}
+    $('style-panel').open=false;$('style-panel').querySelector('summary').focus();react();
+  };
+  let look;try{look=localStorage.getItem('ksync.doona.look');}catch{}setLook(Object.hasOwn(looks,look)?look:'signature');
+  const greetings=['Hey, I’m Doona!','Hi there!','What’s on your shelf?'];let greeting=0;
+  $('doona-hello').onclick=()=>{greeting=(greeting+1)%greetings.length;$('hello-bubble').textContent=greetings[greeting];react();};
+  $('room-form').onsubmit=e=>{e.preventDefault();submit(input.value);};
+  $('room-restart').onclick=home;
+  document.addEventListener('catalog-ready',()=>{if(phase==='home')home();else if(phase==='waiting')advance();});
+  document.addEventListener('catalog-error',()=>{catalogError=true;if(phase==='waiting')advance();});
+  function revealSection() {
+    if(location.hash==='#discover' || location.hash==='#studio') document.querySelector(location.hash).hidden=false;
   }
-  let initialLook = 'signature';
-  try {
-    const saved = localStorage.getItem('ksync.doona.look');
-    if (Object.hasOwn(looks, saved)) initialLook = saved;
-  } catch {}
-  setLook(initialLook);
-  function greet() {
-    $('doona-line').textContent = replies[replyIndex];
-    replyIndex = (replyIndex + 1) % replies.length;
-    bounce();
-  }
-  $('doona-hello').onclick = greet;
-  $('doona-speech').onclick = greet;
-  stage.onpointermove = event => {
-    if (event.pointerType === 'touch' || reduceMotion.matches) return;
-    const rect = stage.getBoundingClientRect();
-    stage.style.setProperty('--dx', ((event.clientX-rect.left)/rect.width-.5)*14+'px');
-    stage.style.setProperty('--dy', ((event.clientY-rect.top)/rect.height-.5)*7+'px');
-  };
-  stage.onpointerleave = () => {
-    stage.style.removeProperty('--dx');
-    stage.style.removeProperty('--dy');
-  };
-
-  $('doona-chat').onclick = () => {
-    lastHeroChatTrigger = $('doona-chat');
-    if (!chat.log.length) chatAdd('agent', 'Hey, I’m Doona! What would you like help finding? Try “Glow under $30.”');
-    chatOpen(true);
-  };
-  function restoreChatFocus() {
-    if (lastHeroChatTrigger && !chat.open) {
-      lastHeroChatTrigger.focus({preventScroll:true});
-      lastHeroChatTrigger = null;
-    }
-  }
-  $('chat-x').addEventListener('click', restoreChatFocus);
-  window.addEventListener('keydown', e => { if (e.key === 'Escape') restoreChatFocus(); });
-
-  $('doona-match').onclick = () => {
-    form.elements.goal.value = state.concern;
-    $('match-budget').value = state.budget;
-    $('match-value').value = '$' + state.budget;
-    $('match-keep').checked = state.keep;
-    finder.showModal();
-  };
-  $('match-budget').oninput = e => { $('match-value').value = '$' + e.target.value; };
-  $('match-close').onclick = () => finder.close();
-  $('match-scan').onclick = () => { finder.close(); $('open-scan').click(); };
-  form.onsubmit = event => {
-    event.preventDefault();
-    if (!catalog.length) return;
-    state.concern = form.elements.goal.value;
-    state.override = Boolean(state.read);
-    state.budget = Number($('match-budget').value);
-    state.keep = $('match-keep').checked;
-    syncControls();
-    finder.close();
-    build();
-    $('routine').setAttribute('tabindex','-1');
-    $('routine').focus({preventScroll:true});
-  };
-  function updateCatalogButton(failed = false) {
-    $('match-submit').disabled = !catalog.length;
-    $('match-submit').textContent = catalog.length ? 'Show my picks' : failed ? 'Catalog unavailable · reload to retry' : 'Loading the catalog…';
-  }
-  updateCatalogButton();
-  document.addEventListener('catalog-ready', () => updateCatalogButton());
-  document.addEventListener('catalog-error', () => updateCatalogButton(true));
+  for(const anchor of document.querySelectorAll('a[href="#discover"],a[href="#studio"]')) anchor.addEventListener('click',()=>{document.querySelector(anchor.hash).hidden=false;});
+  window.addEventListener('hashchange',revealSection);
+  revealSection();
+  home();
 })();

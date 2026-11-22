@@ -99,7 +99,7 @@
       <tbody>${facts(items[0]).map(([name],i)=>`<tr><th scope="row">${esc(name)}</th>${items.map(p=>`<td>${esc(facts(p)[i][1])}</td>`).join('')}</tr>`).join('')}
       <tr><th scope="row">Shop</th>${items.map(p=>`<td>${retailer(p)}</td>`).join('')}</tr></tbody></table><p class="ed-source">Source: Olive Young Global listings · April 13, 2026.</p>`);
   }
-  function goShelf() { $('discover').scrollIntoView({behavior:'smooth'}); }
+  function goShelf() { $('discover').hidden=false; $('discover').scrollIntoView({behavior:'smooth'}); }
   function refresh() { limit = 8; render(); }
   const cats = document.querySelector('.ed-cats');
   Object.keys(categories).forEach(key=>{
@@ -127,6 +127,10 @@
   dialog.addEventListener('click',handleClick);
   document.addEventListener('compare-alternatives',({detail:p})=>{
     reset();alternatives=p;category=categoryName(p);selected=[p.id];render();goShelf();
+  });
+  document.addEventListener('doona-product', event => {
+    const product = lookup(event.detail);
+    if (product) showDetail(product);
   });
   document.addEventListener('catalog-ready',render);
   document.addEventListener('catalog-error',()=>{$('edit-count').textContent='The catalog could not load. Refresh to try again.';});

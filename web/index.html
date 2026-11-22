@@ -1,37 +1,27 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffe1e8"><meta name="description" content="Meet Doona, your personal K-beauty companion. Pick a look, tell her your skin goals, and find skincare within your budget."><title>Meet Doona · K-SYNC</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23d5ff46'/%3E%3Ctext x='9' y='30' font-family='Arial' font-weight='bold' font-size='29'%3ES%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="mirror.js" defer></script><script src="daily.js" defer></script><link rel="stylesheet" href="edit.css"><script src="edit.js" defer></script><link rel="stylesheet" href="doona.css"><script src="doona.js" defer></script></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffe1e8"><meta name="description" content="Meet Doona, your personal K-beauty companion. Pick a look, tell her your skin goals, and find skincare within your budget."><title>Meet Doona · K-SYNC</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23d5ff46'/%3E%3Ctext x='9' y='30' font-family='Arial' font-weight='bold' font-size='29'%3ES%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="mirror.js" defer></script><script src="daily.js" defer></script><link rel="stylesheet" href="edit.css"><script src="edit.js" defer></script><link rel="stylesheet" href="doona.css"><script src="avatar-pose.js" defer></script><script src="avatar-motion.js" defer></script><script src="doona.js" defer></script></head>
 <body>
 <header class="edit-nav"><a href="#" class="doona-logo" aria-label="K-SYNC home">K-SYNC<span aria-hidden="true">✳</span></a><nav aria-label="Main navigation"><a class="meet-link" href="#meet">Meet Doona</a><a href="#discover">Discover</a><a href="#studio">Routine studio</a></nav><div class="edit-account"><button id="shelf-nav"><span aria-hidden="true">♡</span> Saved <small id="saved-count">0</small></button><button id="routine-nav">My routine <span id="count">0</span></button></div></header>
 <main>
-<section class="doona-hero" id="meet" data-look="signature" aria-labelledby="doona-title">
-<div class="doona-inside">
-  <div class="doona-copy">
-    <div class="doona-eyebrow"><span aria-hidden="true">✦</span> YOUR K-BEAUTY COMPANION</div>
-    <h1 id="doona-title">Hey, I’m<br><em>Doona<span>.</span></em></h1>
-    <p>Tell me about your skin. I’ll help you find Korean skincare that fits your routine and budget.</p>
-    <div class="doona-actions"><button id="doona-match"><span class="play-mark" aria-hidden="true"></span>Find my match</button><button id="doona-chat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 1-8 8H8l-5 3 1.4-5A8 8 0 1 1 20 11Z"/><path d="M8 10h.1m4 0h.1m4 0h.1"/></svg>Chat with Doona</button></div>
-    <div class="wardrobe"><div class="wardrobe-head"><span>Choose my look</span><span id="look-name" aria-live="polite">Signature</span></div><div class="wardrobe-list" role="group" aria-label="Doona’s wardrobe"><button type="button" data-look="signature" aria-label="Signature look" title="Signature" aria-pressed="true"><img alt="" src="assets/doona/signature.webp"></button><button type="button" data-look="track" aria-label="Track star look" title="Track star" aria-pressed="false"><img alt="" src="assets/doona/track.webp"></button><button type="button" data-look="silver" aria-label="Silver lining look" title="Silver lining" aria-pressed="false"><img alt="" src="assets/doona/silver.webp"></button><button type="button" data-look="denim" aria-label="Off duty look" title="Off duty" aria-pressed="false"><img alt="" src="assets/doona/denim.webp"></button><button type="button" data-look="beret" aria-label="After hours look" title="After hours" aria-pressed="false"><img alt="" src="assets/doona/beret.webp"></button></div></div>
+<section class="companion-room" id="meet" data-look="signature" aria-label="Talk to Doona">
+  <div class="room-tools"><div class="room-name"><span class="room-flower" aria-hidden="true">✳</span><div><strong>Doona</strong><small>Your K-beauty companion</small></div></div>
+    <div class="room-settings"><details id="style-panel"><summary>Style Doona</summary><div class="style-pop"><span id="look-name" aria-live="polite">Signature</span><div class="wardrobe-list" role="group" aria-label="Doona’s wardrobe"><button type="button" data-look="signature" aria-label="Signature look" title="Signature" aria-pressed="true"><img alt="" src="assets/doona/signature.webp"></button><button type="button" data-look="track" aria-label="Track star look" title="Track star" aria-pressed="false"><img alt="" src="assets/doona/track.webp"></button><button type="button" data-look="silver" aria-label="Silver lining look" title="Silver lining" aria-pressed="false"><img alt="" src="assets/doona/silver.webp"></button><button type="button" data-look="denim" aria-label="Off duty look" title="Off duty" aria-pressed="false"><img alt="" src="assets/doona/denim.webp"></button><button type="button" data-look="beret" aria-label="After hours look" title="After hours" aria-pressed="false"><img alt="" src="assets/doona/beret.webp"></button></div></div></details><button id="motion-control" type="button">Pause motion</button></div>
   </div>
-  <div class="doona-stage">
-    <div class="stage-grid" aria-hidden="true"></div><div class="doona-burst" aria-hidden="true"></div>
-    <span aria-hidden="true" class="doona-spark spark-a">✦</span><span aria-hidden="true" class="doona-spark spark-b">✧</span>
-    <button class="doona-figure" id="doona-hello" aria-label="Say hi to Doona"><img id="doona-art" src="assets/doona/signature.webp" alt="Doona in a black blazer holding a lime serum bottle" fetchpriority="high"></button>
-    <div class="doona-sticker" aria-hidden="true">hey<em>!</em></div>
-    <button id="doona-speech" class="doona-dialogue" aria-label="Show another message from Doona"><span class="speech-dot" aria-hidden="true"></span><span id="doona-line" aria-live="polite">What’s on your skincare wishlist?</span></button>
+  <div class="avatar-theatre"><div class="room-aura" aria-hidden="true"></div><div class="orbit-ring" aria-hidden="true"></div>
+    <button id="doona-hello" class="room-figure" aria-label="Say hello to Doona"><img id="doona-art" fetchpriority="high" alt="Doona in her signature look" src="assets/doona/signature.webp"><canvas width="640" height="640" id="doona-canvas" aria-hidden="true"></canvas></button>
+    <span class="hello-bubble" id="hello-bubble" aria-live="polite">Hey, I’m Doona!</span>
   </div>
-</div></section>
-<dialog id="match-dialog" aria-labelledby="match-title">
-<form id="match-form">
-  <div class="match-top"><img id="match-face" src="assets/doona/signature.webp" alt=""><span>Doona’s routine finder</span><button type="button" id="match-close" aria-label="Close routine finder">×</button></div>
-  <h2 id="match-title">What does your skin need?</h2>
-  <fieldset class="match-goals"><legend>Pick one focus</legend><label><input type="radio" name="goal" value="Hydration" required><span>Hydration</span></label><label><input type="radio" name="goal" value="Comfort" required><span>Comfort</span></label><label><input type="radio" name="goal" value="Glow" required><span>Glow</span></label></fieldset>
-  <label class="match-budget" for="match-budget">My total budget <output id="match-value" for="match-budget">$60</output></label>
-  <input id="match-budget" type="range" min="15" max="120" step="5" value="60"><div class="match-range"><span>$15</span><span>$120</span></div>
-  <label class="match-keep"><input id="match-keep" type="checkbox" checked> I already have a moisturizer</label>
-  <button id="match-submit" type="submit">Show my picks</button>
-  <button id="match-scan" type="button">Try a skin read first</button>
-</form></dialog>
-<section id="discover" aria-labelledby="discover-title">
+  <div class="room-dock">
+    <div id="room-context" hidden></div>
+    <h1 id="room-question" aria-live="polite">What can I help you find?</h1>
+    <div id="room-result"></div>
+    <form id="room-form"><label class="room-sr" for="room-input">Message Doona</label><input id="room-input" autocomplete="off" maxlength="240" placeholder="Try “a hydrating serum under $30”"><button type="submit" id="room-send" aria-label="Send to Doona"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7M12 5v14"/></svg></button></form>
+    <div id="room-choices" role="group" aria-label="Suggested replies"></div>
+    <button type="button" id="room-restart" hidden>Start over</button>
+  </div>
+<div class="room-links"><a href="#discover">Browse products</a><span aria-hidden="true">·</span><a href="#studio">Routine studio</a></div>
+</section>
+<section hidden id="discover" aria-labelledby="discover-title">
 <div class="ed-head"><div><div class="ed-kicker">PRODUCT DISCOVERY</div><h2 id="discover-title">The skincare shelf<span>.</span></h2></div>
 <label class="ed-search"><span aria-hidden="true">⌕</span><input type="search" id="edit-search" placeholder="Search brand, product, ingredient" aria-label="Search brand, product, ingredient"></label></div>
 <div class="ed-cats" role="group" aria-label="Product categories"></div>
@@ -42,7 +32,7 @@
 <div class="ed-summary"><span id="edit-count" role="status">Loading products…</span><button id="edit-reset" hidden>Clear filters</button></div><div id="edit-grid"></div><button id="edit-more" hidden>Show more products</button>
 <p class="ed-source">Olive Young Global catalog · USD prices recorded April 13, 2026. Skin-type tags are SYNC estimates. Check the retailer for current prices and ingredients.</p>
 </section>
-<div id="studio" class="studio-intro"><div class="ed-kicker">ROUTINE STUDIO</div><h2>Build your routine<span>.</span></h2></div>
+<div hidden id="studio" class="studio-intro"><div class="ed-kicker">ROUTINE STUDIO</div><h2>Build your routine<span>.</span></h2></div>
 <section class="hero" aria-label="Personal beauty assistant">
 <div class="avatar-stage" id="stage">
 <div class="stage-title">A little<br>more <em>you.</em></div>
