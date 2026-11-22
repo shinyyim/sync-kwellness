@@ -1,69 +1,34 @@
-:root {
-  --room-ink: #302334;
-  --room-muted: #67596a;
-}
-.doona-bar {
-  position: absolute; inset: 0 0 auto; z-index: 8; display: flex;
-  align-items: center; justify-content: space-between; padding: 22px clamp(20px,4vw,64px);
-  color: var(--room-ink); pointer-events: none;
-}
-.doona-bar > * {pointer-events: auto}
-.doona-logo {font: 900 31px/.95 Arial,sans-serif; letter-spacing: -2.7px}
-.doona-logo span {color: #88709d; font-size: 21px; vertical-align: top; margin-left: 1px}
-#room-menu {position: relative}
-#room-menu summary, .room-settings summary, #motion-control {
-  list-style: none; cursor: pointer; border: 1px solid #3b294b25; border-radius: 40px;
-  background: #fff9; padding: 10px 15px; font: 500 14px/1.2 Arial,sans-serif; color: var(--room-ink);
-}
-summary::-webkit-details-marker {display: none}
-#room-menu summary span {margin-left: 5px}
-#room-menu nav, .style-pop {
-  position: absolute; border: 1px solid #d8cbd9; background: #fffafc;
-  box-shadow: 0 10px 30px #4b34521c; border-radius: 18px; padding: 9px;
-}
-#room-menu nav {width: 195px; right: 0; top: calc(100% + 9px); display: grid; gap: 2px}
-#room-menu nav a, #room-menu nav button {
-  font: 500 15px/1.3 Arial,sans-serif; background: none; color: inherit; text-align: left;
-  padding: 10px 12px; border: 0; border-radius: 10px;
-}
-#room-menu nav :is(a,button):hover {background: #f1e8f4}
-#room-menu small {float: right}
-.companion-room {
-  --blush: #ffcbda; --lilac: #d7c5f6; --peach: #ffe4bf;
-  position: relative; isolation: isolate; overflow: hidden; color: var(--room-ink);
-  min-height: 100vh; min-height: 100svh; display: grid; align-items: center;
-  padding: 78px 20px 74px;
-  background:
-    radial-gradient(ellipse at 50% 37%, #fff9efed 0%,#fff5ea75 21%, transparent 47%),
-    radial-gradient(ellipse at 13% 15%,var(--blush),transparent 52%),
-    radial-gradient(ellipse at 82% 67%,var(--lilac),transparent 61%),
-    radial-gradient(ellipse at 8% 90%,var(--peach),transparent 60%), #f1e6f7;
-}
-.companion-room[data-look=track] {--blush:#d7e9bd;--lilac:#cde4ce}
-.companion-room[data-look=silver] {--blush:#d8dffe;--lilac:#c7c5e7}
-.companion-room[data-look=denim] {--blush:#ccecf3;--lilac:#cfd8ed}
-.companion-room[data-look=beret] {--blush:#f9c1d6;--lilac:#dcc3e4}
-.room-stage {width: min(100%,800px); margin: auto; position: relative}
-.avatar-theatre {
-  position: relative; display: grid; place-items: center; isolation: isolate;
-  width: min(100%,650px); height: clamp(220px,44vh,450px); margin: 0 auto;
-}
-[data-scene=hello] .avatar-theatre {height: clamp(280px,52vh,540px)}
-[data-scene=result] .avatar-theatre {height: clamp(185px,29vh,330px)}
-.room-orbit {
-  position: absolute; width: 82%; height: 55%; top: 27%; border: 1px solid #fff9;
-  border-bottom-color: #8d72995e; border-radius: 50%; transform: rotate(-14deg);
-}
-.room-orbit::before {content:'';position:absolute; width: 7px; height: 7px; top: 7%; left: 74%; border-radius: 50%; background: #fff; box-shadow: 0 0 12px white}
-.twinkle {width: 22px; height: 22px; position: absolute; background: #fffdf2; clip-path: polygon(50% 0,60% 36%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 38%); pointer-events: none}
-.star-one {left:17%; top:20%; transform: rotate(-11deg)}
-.star-two {right:12%; top:52%; width:16px; height:16px}
-.star-three {left:11%; bottom:22%; width:11px; height:11px; background:#a98ea9}
-.room-figure {
-  position: absolute; bottom: 0; z-index: 2; height: 100%; aspect-ratio: 1; padding: 0;
-  background: transparent; border: none; border-radius: 20%; transform-origin: 50% 75%;
-  mask-image: linear-gradient(#000 0% 88%,transparent 100%);
-}
+:root{--doona-ink:#1e1522;--doona-pink:#ff549e;--doona-lime:#dbfa54}
+body{background:#fffdf9}
+.edit-nav{width:min(92%,1440px);min-height:73px;gap:clamp(30px,7vw,100px);color:var(--doona-ink)}
+.doona-logo{font:900 34px/.95 Arial,sans-serif;letter-spacing:-2.8px;white-space:nowrap;display:inline-flex;align-items:flex-start}
+.doona-logo span{font-size:25px;line-height:.95;letter-spacing:0;color:#c0eb16;text-shadow:.5px .5px #536019;margin-left:2px}
+.meet-link{font-weight:700}.edit-account #routine-nav{background:#242024;color:#fff;border-color:#242024}
+.doona-hero{--sky:#ffdae6;--spot:#ff9fc7;--burst:#fdffb0;--accent:#e54689;position:relative;isolation:isolate;overflow:hidden;background-color:var(--sky);color:var(--doona-ink);border-block:1px solid #30202c;transition:background-color .35s}
+.doona-hero[data-look=track]{--sky:#eaf3bc;--spot:#c1e68b;--burst:#fff7ae;--accent:#71943b}
+.doona-hero[data-look=silver]{--sky:#e0defc;--spot:#bfb8fc;--burst:#fff7c4;--accent:#8873c8}
+.doona-hero[data-look=denim]{--sky:#d9edfc;--spot:#accde9;--burst:#ffdfac;--accent:#668eb7}
+.doona-hero[data-look=beret]{--sky:#f4d7ef;--spot:#dda9d7;--burst:#ffd7af;--accent:#a16094}
+.doona-inside{max-width:1500px;margin:auto;min-height:570px;display:grid;grid-template-columns:46% 54%;position:relative;padding-inline:clamp(22px,5vw,80px)}
+.doona-copy{position:relative;align-self:center;padding:36px 0 33px;z-index:2;pointer-events:none}
+.doona-copy button{pointer-events:auto}.doona-eyebrow,.wardrobe-head span:last-child,.match-top{font:600 12px/1.4 'IBM Plex Mono',monospace;letter-spacing:.065em}
+.doona-eyebrow{display:inline-flex;align-items:center;gap:8px}.doona-eyebrow span{color:#c92b75;font-size:18px}
+.doona-hero h1{font-family:Arial,Helvetica,sans-serif;font-weight:850;font-size:clamp(88px,8.6vw,142px);line-height:.83;letter-spacing:-.088em;margin:22px 0 21px;color:var(--doona-ink)}
+.doona-hero h1 em{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:700;letter-spacing:-.095em;line-height:.98}
+.doona-hero h1 em span{color:#e33381;margin:0}
+.doona-copy>p{max-width:380px;margin:0;font-size:clamp(16px,1.27vw,21px);line-height:1.45;letter-spacing:-.016em}
+.wardrobe{width:max-content;max-width:100%}.wardrobe-head{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:7px}.wardrobe-head span:first-child{font-size:14px;font-weight:bold}.wardrobe-head span:last-child{font-size:12px;letter-spacing:0;color:#56434f}
+.wardrobe-list{display:flex;gap:8px}.wardrobe-list button{width:49px;height:49px;border:1px solid #a28794;border-radius:11px;background:#fff9fc;overflow:hidden;position:relative;padding:0;transition:transform .18s}
+.wardrobe-list button img{position:absolute;max-width:none;width:193%;left:-47%;top:1px;pointer-events:none}
+.wardrobe-list button[aria-pressed=true]{border:2px solid var(--doona-ink);box-shadow:2px 2px 0 var(--doona-ink);background:#f5ffab}.wardrobe-list button:hover{transform:translateY(-3px)}
+.doona-stage{position:relative;align-self:stretch;isolation:isolate;min-width:0;--dx:0px;--dy:0px}
+.stage-grid{position:absolute;inset:0 -10% 0 -15%;background:radial-gradient(circle,var(--accent) 1.2px,transparent 1.6px);background-size:9px 9px;opacity:.33;mask-image:radial-gradient(ellipse at 74% 57%,#000 12%,transparent 69%);pointer-events:none}
+.doona-burst{position:absolute;inset:8% -2% 1% -4%;background:var(--burst);clip-path:polygon(52% 0,57% 26%,74% 4%,69% 32%,94% 19%,78% 42%,100% 43%,82% 52%,98% 69%,74% 64%,84% 87%,62% 72%,63% 100%,51% 79%,33% 100%,36% 72%,10% 85%,26% 63%,0 60%,24% 48%,4% 29%,31% 35%,23% 9%,42% 29%);transform:rotate(-7deg) translate(calc(var(--dx) * -.3),0);pointer-events:none}
+.doona-stage::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 52% 57%,var(--spot),transparent 66%)}
+.doona-sticker{position:absolute;z-index:3;left:3%;top:27%;transform:rotate(-13deg);font:italic 800 clamp(38px,4.6vw,70px)/.88 Georgia,serif;letter-spacing:-.085em;color:#fffdf8;-webkit-text-stroke:1.4px #251a24;paint-order:stroke fill;text-shadow:2.5px 3px #251a24;pointer-events:none}
+.doona-sticker em{color:var(--doona-lime)}.doona-spark{position:absolute;z-index:1;pointer-events:none;line-height:1}.spark-a{font-size:54px;color:#eb4384;right:5%;top:15%;transform:rotate(9deg)}.spark-b{font-size:55px;left:2%;bottom:18%;color:#33272c}
+.doona-dialogue{position:absolute;z-index:4;right:-2%;bottom:11%;width:max-content;max-width:205px;text-align:left;background:#fffdf8;border:1.5px solid var(--doona-ink);border-radius:16px 16px 16px 3px;box-shadow:3px 3px var(--doona-ink);padding:13px 14px;display:flex;align-items:flex-start;gap:8px;transform:rotate(3deg);font:600 15px/1.25 Arial,sans-serif}
+.speech-dot{width:8px;height:8px;flex:0 0 8px;margin-top:4px;border:1px solid #40342c;border-radius:50%;background:var(--doona-lime)}
 .room-figure img, .room-figure canvas {height:100%;width:100%;object-fit:contain;position:absolute;inset:0}
 .room-figure canvas {opacity:0;pointer-events:none}
 .room-figure.mesh-ready canvas {opacity:1}
@@ -71,20 +36,15 @@ summary::-webkit-details-marker {display: none}
 .room-figure:not(.mesh-ready):not(.motion-paused) {transform:perspective(650px) rotateY(var(--look-x,0deg));transition:transform .16s ease-out}
 .room-figure:not(.mesh-ready):not(.motion-paused) img {animation:doona-idle 4s ease-in-out infinite;transform-origin:50% 82%}
 @keyframes doona-idle {0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1.5deg) translateY(-5px)}}
-.hello-bubble {position:absolute; z-index:3; top:30%; left:65%; max-width:135px; background:#fffcf3; border-radius:16px 16px 16px 2px; padding:10px 14px; font-size:14px; pointer-events:none; transform:rotate(4deg)}
-.room-dock {position:relative; text-align:center; margin:auto; width:min(100%,650px); z-index:3}
-#room-question {font:600 clamp(29px,4.2vw,58px)/1.04 Arial,sans-serif; letter-spacing:-.066em; margin:8px 0 0; text-wrap:balance; outline:none}
-[data-scene=hello] #room-question {font-size:clamp(49px,6.6vw,94px); margin-top:0}
-#room-question em {font-family:Georgia,serif; font-weight:400}
-#room-caption {margin:11px 0 0; font-size:clamp(16px,1.35vw,20px); line-height:1.4; color:var(--room-muted)}
+
 #room-progress {display:flex;align-items:center;justify-content:center;gap:5px;margin:8px 0 12px}
-#room-step {margin-right:4px; font-size:13px; color:var(--room-muted)}
+#room-step {margin-right:4px; font-size:13px; color:#604b59}
 #room-progress i {width:17px;height:4px;border-radius:4px;background:#ad98ae}
 #room-progress i:first-of-type, [data-scene=budget] #room-progress i {background:#523b57}
 #room-choices {display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;margin:20px auto 0}
 #room-choices button {
   display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:47px;
-  border:1px solid #5e456a42; border-radius:30px; background:#fffaf4e8; color:var(--room-ink);
+  border:1px solid #5e456a42; border-radius:30px; background:#fffaf4e8; color:var(--doona-ink);
   padding:12px 19px; font-weight:600; transition:transform .16s,background .16s;
 }
 #room-choices button:hover {transform:translateY(-2px); background:white}
@@ -97,39 +57,16 @@ summary::-webkit-details-marker {display: none}
 .mark-save {color:inherit}
 #room-back {background:none;border:0;color:#58475d;text-decoration:underline;text-underline-offset:3px;padding:11px 16px;font-size:14px}
 #room-result {width:min(100%,420px); margin:auto}
-.pick-ticket {display:flex; align-items:center; gap:15px; margin:15px auto 0; border:1px solid #fff8; border-radius:20px; background:#fffcf6eb; padding:11px 17px 11px 11px; text-align:left; width:100%; color:var(--room-ink)}
+.pick-ticket {display:flex; align-items:center; gap:15px; margin:15px auto 0; border:1px solid #fff8; border-radius:20px; background:#fffcf6eb; padding:11px 17px 11px 11px; text-align:left; width:100%; color:var(--doona-ink)}
 .pick-ticket img {width:64px;height:64px;border-radius:12px;object-fit:cover}
 .pick-ticket strong,.pick-ticket small,.pick-ticket span span {display:block}
-.pick-ticket small,.pick-ticket span span {color:var(--room-muted);font-size:13px}
+.pick-ticket small,.pick-ticket span span {color:#604b59;font-size:13px}
 .pick-ticket strong {font-size:17px; margin:4px 0}
-#room-result p {font-size:14px; margin:8px 0; color:var(--room-muted);line-height:1.4}
-.room-settings {position:absolute;z-index:4;bottom:18px;right:clamp(16px,4vw,64px);display:flex;gap:7px;align-items:center}
-.room-settings summary,#motion-control {background:#ffffff59;padding:8px 13px}
-#style-panel {position:relative}
-.style-pop {bottom:calc(100% + 8px);right:0;width:254px;padding:14px}
-.style-pop>span {font-size:14px;font-weight:600}
-.wardrobe-list {display:flex;gap:5px;margin-top:8px}
-.wardrobe-list button {width:41px;height:45px;overflow:hidden;border-radius:9px;border:1px solid #c5b6ce;position:relative;padding:0;background:#f4edf8}
-.wardrobe-list button img {width:190%;position:absolute;left:-45%;top:1px}
-.wardrobe-list button[aria-pressed=true] {border:2px solid #40304d;background:#ead7ff}
+#room-result p {font-size:14px; margin:8px 0; color:#604b59;line-height:1.4}
+
 .meeting-doona .buddy:not(.chatting) {visibility:hidden}
 .buddy.away.chatting {opacity:1;transform:none;pointer-events:auto}
 #studio[hidden]+.hero,#studio[hidden]~.ticker,#studio[hidden]~.conversation {display:none}
-@media(max-width:620px) {
-  .doona-bar {padding:16px 18px}
-  .companion-room {padding:66px 16px 68px}
-  [data-scene=hello] .avatar-theatre {height:min(48svh,105vw,425px)}
-  .avatar-theatre {height:min(34svh,85vw,320px)}
-  [data-scene=result] .avatar-theatre {height:min(25svh,225px)}
-  #room-choices {gap:7px;margin-top:17px}
-  #room-choices button {padding:11px 13px;font-size:15px}
-  .style-pop {right:-65px}
-  .room-orbit {width:94%}
-}
-@media(prefers-reduced-motion:reduce) {
-  html {scroll-behavior:auto}
-  .room-figure:not(.mesh-ready) img,#room-choices button {animation:none;transition:none}
-}
 .mood-particle {
   position:absolute; z-index:3; pointer-events:none; opacity:0; font:600 26px/1 Georgia,serif;
   animation:mood-float 900ms cubic-bezier(.18,.65,.32,1) both;
@@ -143,8 +80,93 @@ summary::-webkit-details-marker {display: none}
   100% {opacity:0;transform:translateY(-40px) scale(1.13)}
 }
 @media(prefers-reduced-motion:no-preference) {
-  .companion-room:not(:has(.motion-paused)) #room-choices button {animation:reply-in .22s ease-out backwards}
+  .doona-hero:not(:has(.motion-paused)) #room-choices button {animation:reply-in .22s ease-out backwards}
   #room-choices button:nth-child(2) {animation-delay:35ms}
   #room-choices button:nth-child(3) {animation-delay:70ms}
 }
 @keyframes reply-in {from{opacity:0;translate:0 4px}to{opacity:1;translate:0 0}}
+
+.edit-nav {position:relative;z-index:8}
+#menu-toggle {display:none}
+.doona-inside {
+  min-height:max(570px,calc(100svh - 73px)); grid-template-areas:"copy art";
+  grid-template-columns:minmax(0,46fr) minmax(0,54fr);
+}
+.doona-copy {grid-area:copy;pointer-events:auto;min-width:0}
+.doona-stage {grid-area:art}
+.room-figure {
+  position:absolute;bottom:0;left:50%;translate:-50% 0;z-index:2;
+  width:min(120%,calc(100svh - 90px));aspect-ratio:1;padding:0;border:0;background:transparent;
+}
+.doona-sticker {z-index:3}
+.doona-dialogue {pointer-events:none}
+.doona-hero h1 {font-size:clamp(46px,5.1vw,86px);line-height:.98;letter-spacing:-.065em;outline:none;text-wrap:balance}
+.doona-hero[data-scene=hello] h1 {font-size:clamp(78px,8.65vw,147px);line-height:.88;letter-spacing:-.087em}
+#room-question em {display:block}
+#room-caption {max-width:36ch;color:#392734;font-size:clamp(16px,1.28vw,21px)}
+#room-choices,#room-progress {justify-content:flex-start}
+#room-progress {margin:22px 0 8px}
+#room-progress i {background:#bd8da2;border-radius:0}
+#room-progress i:first-of-type,[data-scene=budget] #room-progress i {background:#332331}
+#room-choices {margin:22px 0 0;gap:9px}
+#room-choices button {
+  color:var(--doona-ink);border:1.5px solid currentColor;border-radius:11px;
+  background:#fffaf5;box-shadow:2px 3px 0 var(--doona-ink);font-weight:700;
+}
+#room-choices button.room-primary {color:var(--doona-ink);background:var(--doona-lime);border-color:var(--doona-ink);box-shadow:3px 4px 0 var(--doona-ink)}
+#room-choices button:active {translate:2px 2px;box-shadow:none}
+#room-result {margin:0;width:min(100%,425px)}
+.pick-ticket {border:1.5px solid var(--doona-ink);background:#fffdf8;box-shadow:3px 4px 0 var(--doona-ink);border-radius:12px}
+.pick-ticket span span,.pick-ticket small,#room-result p,#room-step {color:#604b59}
+#room-back {padding-left:0;margin-top:7px}
+.wardrobe {margin-top:26px}
+[data-scene]:not([data-scene=hello]) .wardrobe {display:none}
+#motion-control {
+  position:absolute;z-index:5;right:18px;bottom:12px;padding:7px 11px;
+  border:1px solid #32233170;border-radius:20px;background:#fffbf2dd;color:#392731;font-size:13px;
+}
+@media(min-width:761px) and (min-aspect-ratio:2/1) {
+  .room-figure {width:min(120%,max(550px,calc(100svh - 80px)))}
+}
+@media(max-width:760px) {
+  .edit-nav {width:92%;min-height:56px;gap:12px}
+  .doona-logo {font-size:27px}.doona-logo span {font-size:20px}
+  #menu-toggle {display:block;border:0;background:transparent;padding:9px 2px;font-size:14px}
+  .edit-nav #room-menu {display:none;position:absolute;top:calc(100% - 3px);left:0;background:#fffaf4;border:1.5px solid #241524;box-shadow:3px 3px #241524;border-radius:12px;padding:8px}
+  .edit-nav #room-menu.is-open {display:grid;gap:0}
+  .edit-nav #room-menu a,.edit-nav #room-menu a:first-child {display:block;padding:10px}
+  .edit-account {gap:5px}.edit-account button {white-space:nowrap;font-size:13px}.edit-account #routine-nav {padding:7px 9px}
+  .doona-inside {padding:0 6% 44px;min-height:calc(100svh - 56px);align-content:start;grid-template-columns:minmax(0,1fr);grid-template-areas:"art" "copy"}
+  .doona-stage {height:clamp(220px,35svh,370px)}
+  .room-figure {width:auto;height:98%;max-width:100%}
+  .doona-burst {inset:5% -2% -1%;transform:rotate(-5deg)}
+  .stage-grid {inset:0 -8% -2%}
+  .doona-sticker {left:8%;top:26%;font-size:clamp(36px,7vw,52px)}
+  .spark-a {right:5%;top:11%;font-size:34px}.spark-b {left:7%;bottom:10%;font-size:31px}
+  .doona-dialogue {right:-2%;bottom:8%;max-width:130px;font-size:12px;padding:8px;gap:6px}
+  .doona-copy {padding:15px 0 4px}
+  .doona-eyebrow {font-size:12px}
+  .doona-hero h1,.doona-hero[data-scene=hello] h1 {margin:9px 0 11px;font-size:clamp(38px,8vw,58px);line-height:1}
+  .doona-hero[data-scene=hello] h1 {font-size:clamp(45px,10.4vw,72px)}
+  #room-question em {display:inline}
+  #room-caption {max-width:40ch;font-size:16px}
+  #room-choices {margin-top:15px;gap:7px}
+  #room-choices button {min-height:44px;padding:10px 13px;font-size:14px}
+  #room-progress {margin:9px 0 0}
+  .wardrobe {margin-top:21px}
+  .wardrobe-list button {width:42px;height:42px}
+  #motion-control {bottom:7px;right:10px}
+}
+@media(max-width:385px) {.edit-account #shelf-nav>span{display:none}.edit-nav{gap:7px}}
+@media(prefers-reduced-motion:reduce) {
+  html {scroll-behavior:auto}
+  .doona-hero,.room-figure:not(.mesh-ready) img,#room-choices button {animation:none;transition:none}
+}
+.edit-account #routine-nav #count {color:var(--doona-ink)}
+@media(min-width:761px) {.edit-nav #room-menu {flex:1}}
+@media(max-width:760px) {
+  #menu-toggle {margin-left:auto;border:1px solid #362838;border-radius:20px;padding:7px 15px}
+  .edit-nav #room-menu {left:auto;right:0;min-width:172px}
+  #room-menu .edit-account {display:grid;gap:3px;margin:3px 0 0;padding:6px 2px 3px;border-top:1px solid #dfd1dc}
+  #room-menu .edit-account button {padding:9px 11px;justify-content:flex-start}
+}

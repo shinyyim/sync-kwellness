@@ -41,7 +41,9 @@
     const step = next === 'goal' ? 1 : next === 'budget' ? 2 : 0;
     $('room-progress').hidden = !step;
     $('room-step').textContent = step ? step + ' of 2' : '';
-    $('hello-bubble').hidden = true;
+    const lines = {hello:'What’s on your skincare wishlist?',goal:'Pick what feels like you.',budget:'I’ll stick to your budget.',result:'Take a closer look.'};
+    $('hello-bubble').hidden = !lines[next];
+    $('bubble-text').textContent = lines[next] || '';
     $('doona-hello').setAttribute('aria-label', next === 'hello' ? 'Say hi to Doona' : 'Wave to Doona');
     if(focus) heading.focus({preventScroll:true});
   }
@@ -50,10 +52,12 @@
     goal = budget = pick = null;
     fromMemory = false;
     const last = catalog.find(p => p.id === remembered);
-    screen('hello', last ? 'Hey, welcome back.' : 'Hey, I’m ', last ? 'I saved your ' + last.brand + ' pick.' : 'Your personal K-beauty companion.', focus);
+    screen('hello', last ? 'Hey, welcome back.' : 'Hey, I’m ', last ? 'I saved your ' + last.brand + ' pick.' : 'Two quick picks. I’ll find Korean skincare for your skin and budget.', focus);
     if(!last) {
       const name = document.createElement('em');
-      name.textContent = 'Doona.'; heading.append(name);
+      name.textContent = 'Doona';
+      const dot = document.createElement('span'); dot.textContent = '.';
+      name.append(dot); heading.append(name);
     }
     chip(last ? 'See my pick' : 'Say hi', greet, 'wave', true);
     if(last) chip('Find a new pick', askGoal);
@@ -141,7 +145,7 @@
     react();
     if(scene === 'hello') {greet();return;}
     const bubble = $('hello-bubble');
-    bubble.textContent = scene === 'goal' ? 'Go with your gut!' : scene === 'budget' ? 'Your call!' : 'Hi again!';
+    $('bubble-text').textContent = scene === 'goal' ? 'Go with your gut!' : scene === 'budget' ? 'Your call!' : 'Hi again!';
     bubble.hidden = false;
   };
   function setLook(key) {
@@ -153,7 +157,7 @@
   }
   for(const b of document.querySelectorAll('.wardrobe-list button')) b.onclick=()=>{
     setLook(b.dataset.look); try {localStorage.setItem('ksync.doona.look',b.dataset.look);} catch {}
-    $('style-panel').open=false;$('style-panel').querySelector('summary').focus();react();
+    react();
   };
   let look;try {look=localStorage.getItem('ksync.doona.look');} catch {}
   setLook(Object.hasOwn(looks,look)?look:'signature');
@@ -163,14 +167,20 @@
     if(hash==='#discover' || hash==='#studio') document.querySelector(hash).hidden=false;
   }
   const menu=$('room-menu');
-  menu.querySelector('nav').addEventListener('click',event=>{
+  const toggle=$('menu-toggle');
+  function toggleMenu(open) {
+    toggle.setAttribute('aria-expanded',String(open));
+    menu.classList.toggle('is-open',open);
+  }
+  toggle.onclick=()=>toggleMenu(toggle.getAttribute('aria-expanded')!=='true');
+  menu.addEventListener('click',event=>{
     const link=event.target.closest('a');
     if(link){showSection(link.hash);if(link.hash==='#meet')hello();}
-    menu.open=false;
+    toggleMenu(false);
   });
   document.querySelector('.doona-logo').addEventListener('click',()=>hello());
-  document.addEventListener('click',event=>{if(!menu.contains(event.target))menu.open=false;});
-  document.addEventListener('keydown',event=>{if(event.key==='Escape' && menu.open){menu.open=false;menu.querySelector('summary').focus();}});
+  document.addEventListener('click',event=>{if(!menu.contains(event.target) && !toggle.contains(event.target))toggleMenu(false);});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape' && toggle.getAttribute('aria-expanded')==='true'){toggleMenu(false);toggle.focus();}});
   window.addEventListener('hashchange',()=>showSection(location.hash));
   new IntersectionObserver(([entry])=>document.body.classList.toggle('meeting-doona',entry.isIntersecting)).observe(room);
   showSection(location.hash);

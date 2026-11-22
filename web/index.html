@@ -1,31 +1,28 @@
 <!doctype html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffe1e8"><meta name="description" content="Meet Doona, your personal K-beauty companion. Say hi, choose a skin goal and budget, and meet your first skincare pick."><title>Meet Doona · K-SYNC</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23d5ff46'/%3E%3Ctext x='9' y='30' font-family='Arial' font-weight='bold' font-size='29'%3ES%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="mirror.js" defer></script><script src="daily.js" defer></script><link rel="stylesheet" href="edit.css"><script src="edit.js" defer></script><link rel="stylesheet" href="doona.css"><script src="avatar-pose.js" defer></script><script src="avatar-motion.js" defer></script><script src="doona.js" defer></script></head>
 <body>
-<header class="doona-bar">
-  <a href="#meet" class="doona-logo" aria-label="K-SYNC home">K-SYNC<span aria-hidden="true">✳</span></a>
-  <details id="room-menu"><summary aria-label="Open navigation">Menu <span aria-hidden="true">☰</span></summary>
-    <nav aria-label="Main navigation"><a href="#meet">Meet Doona</a><a href="#discover">Browse products</a><a href="#studio">Routine studio</a><button id="shelf-nav">Saved products <small id="saved-count">0</small></button><button id="routine-nav">My routine <small id="count">0</small></button></nav>
-  </details>
-</header>
-<main>
-<section class="companion-room" id="meet" data-look="signature" data-scene="hello" aria-label="Meet your K-beauty companion">
-  <div class="room-stage">
-    <div class="avatar-theatre">
-      <div class="room-orbit" aria-hidden="true"></div>
-      <i class="twinkle star-one" aria-hidden="true"></i><i class="twinkle star-two" aria-hidden="true"></i><i class="twinkle star-three" aria-hidden="true"></i>
+<header class="edit-nav"><a href="#meet" class="doona-logo" aria-label="K-SYNC home">K-SYNC<span aria-hidden="true">✳</span></a><button id="menu-toggle" aria-expanded="false" aria-controls="room-menu">Menu</button><nav id="room-menu" aria-label="Main navigation"><a class="meet-link" href="#meet">Meet Doona</a><a href="#discover">Discover</a><a href="#studio">Routine studio</a><div class="edit-account"><button id="shelf-nav"><span aria-hidden="true">♡</span> Saved <small id="saved-count">0</small></button><button id="routine-nav">My routine <span id="count">0</span></button></div></nav></header><main>
+<section class="doona-hero" id="meet" data-look="signature" data-scene="hello" aria-label="Meet your K-beauty companion">
+  <div class="doona-inside">
+    <div class="avatar-theatre doona-stage">
+      <div class="stage-grid" aria-hidden="true"></div><div class="doona-burst" aria-hidden="true"></div>
+      <span aria-hidden="true" class="doona-spark spark-a">✦</span><span aria-hidden="true" class="doona-spark spark-b">✧</span>
+      <span class="doona-sticker" aria-hidden="true">hey<em>!</em></span>
       <button id="doona-hello" class="room-figure" aria-label="Say hi to Doona"><img id="doona-art" fetchpriority="high" alt="Doona in her signature look" src="assets/doona/signature.webp"><canvas width="640" height="640" id="doona-canvas" aria-hidden="true"></canvas></button>
-      <span class="hello-bubble" id="hello-bubble" aria-live="polite" hidden></span>
+      <span class="doona-dialogue" id="hello-bubble"><span class="speech-dot" aria-hidden="true"></span><span id="bubble-text">What’s on your skincare wishlist?</span></span>
     </div>
-    <div class="room-dock">
+    <div class="doona-copy">
+      <div class="doona-eyebrow"><span aria-hidden="true">✦</span> YOUR K-BEAUTY COMPANION</div>
       <div id="room-progress" hidden><span id="room-step"></span><i></i><i></i></div>
-      <h1 id="room-question" tabindex="-1">Hey, I’m <em>Doona.</em></h1>
-      <p id="room-caption">Your personal K-beauty companion.</p>
+      <h1 id="room-question" tabindex="-1">Hey, I’m <em>Doona<span>.</span></em></h1>
+      <p id="room-caption">Two quick picks. I’ll find Korean skincare for your skin and budget.</p>
       <div id="room-result"></div>
       <div id="room-choices" role="group" aria-label="Choose your reply"><button type="button" id="first-hello">Say hi</button></div>
       <button type="button" id="room-back" hidden>Back</button>
+      <div class="wardrobe"><div class="wardrobe-head"><span>Choose my look</span><span id="look-name" aria-live="polite">Signature</span></div><div class="wardrobe-list" role="group" aria-label="Doona’s wardrobe"><button type="button" data-look="signature" aria-label="Signature look" title="Signature" aria-pressed="true"><img alt="" src="assets/doona/signature.webp"></button><button type="button" data-look="track" aria-label="Track star look" title="Track star" aria-pressed="false"><img alt="" src="assets/doona/track.webp"></button><button type="button" data-look="silver" aria-label="Silver lining look" title="Silver lining" aria-pressed="false"><img alt="" src="assets/doona/silver.webp"></button><button type="button" data-look="denim" aria-label="Off duty look" title="Off duty" aria-pressed="false"><img alt="" src="assets/doona/denim.webp"></button><button type="button" data-look="beret" aria-label="After hours look" title="After hours" aria-pressed="false"><img alt="" src="assets/doona/beret.webp"></button></div></div>
     </div>
   </div>
-  <div class="room-settings"><details id="style-panel"><summary>Style Doona</summary><div class="style-pop"><span id="look-name" aria-live="polite">Signature</span><div class="wardrobe-list" role="group" aria-label="Doona’s wardrobe"><button type="button" data-look="signature" aria-label="Signature look" title="Signature" aria-pressed="true"><img alt="" src="assets/doona/signature.webp"></button><button type="button" data-look="track" aria-label="Track star look" title="Track star" aria-pressed="false"><img alt="" src="assets/doona/track.webp"></button><button type="button" data-look="silver" aria-label="Silver lining look" title="Silver lining" aria-pressed="false"><img alt="" src="assets/doona/silver.webp"></button><button type="button" data-look="denim" aria-label="Off duty look" title="Off duty" aria-pressed="false"><img alt="" src="assets/doona/denim.webp"></button><button type="button" data-look="beret" aria-label="After hours look" title="After hours" aria-pressed="false"><img alt="" src="assets/doona/beret.webp"></button></div></div></details><button id="motion-control" type="button">Pause motion</button></div>
+  <button id="motion-control" type="button">Pause motion</button>
 </section>
 <section hidden id="discover" aria-labelledby="discover-title">
 <div class="ed-head"><div><div class="ed-kicker">PRODUCT DISCOVERY</div><h2 id="discover-title">The skincare shelf<span>.</span></h2></div>
