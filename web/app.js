@@ -12,7 +12,8 @@
    inside the budget, with what was ruled out and why. */
 
 const $ = id => document.getElementById(id);
-const API = new URLSearchParams(location.search).get('api') || 'http://localhost:8000';
+const API = new URLSearchParams(location.search).get('api')
+  || (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? 'http://localhost:8000' : '/api');
 
 const state = { concern: 'Hydration', budget: 60, keep: true, read: null, override: false, items: [], skipped: [], selected: new Set() };
 let catalog = [];
@@ -333,7 +334,7 @@ function agentSystem() {
   ].join('\n') : 'No read yet. Suggest the scan if it would help.';
   const picks = state.items.map(([p, role, t]) => { const e = p.enriched || {}; return `- ${p.brand} ${p.name}, $${p.price_usd.toFixed(2)} (${role}; ${whereItGoes(p, role, state.items)}) — ${reasonFor(p, role, t)}\n  What it is: ${e.what || '-'}\n  Key ingredients (label position): ${(e.key_actives || []).map(a => `${a.inci} #${a.position}/${a.of} (${a.does})`).join('; ') || '-'}\n  How to use (${e.when || 'AM and PM'}): ${(e.how_to_use || []).join(' ')}${e.caution ? `\n  Caution: ${e.caution}` : ''}`; }).join('\n') || '- none yet';
   const left = state.skipped.map(x => `- ${x.name} — ${x.reason}`).join('\n') || '- none';
-  return `You are SYNC, a K-wellness companion speaking out loud to one person in a live demo. You have no other name.
+  return `You are Doona, K-SYNC’s K-beauty companion, speaking with one person.
 ${state.name ? `The person's name is ${state.name}. Use it now and then, not every reply.` : ''}
 Voice: a trusted older friend who knows skin. Warm, direct, opinionated, concrete. Not a teacher, not customer service.
 Reply ONLY with JSON, no code fences: {"say": string, "set": {"budget": number|null, "focus": "Hydration"|"Comfort"|"Glow"|null, "keepMoisturizer": true|false|null}}
@@ -412,7 +413,7 @@ $('stage').addEventListener('pointermove', e => {
 });
 $('stage').addEventListener('pointerleave', () => $('portrait').style.transform = '');
 $('avatar-touch').onclick = () => say(['Your routine should fit you. Not the other way around.', 'Keep the good stuff. Let’s find what’s missing.', 'Sometimes the right answer is: don’t buy it.'][Math.floor(Math.random() * 3)]);
-$('sound').onclick = () => { unlockAudio(); voice.convo = true; say("Hey, I'm SYNC. Let me look at your skin, then tell me your budget. I'll find what's missing.", true); };
+$('sound').onclick = () => { unlockAudio(); voice.convo = true; say("Hey, I'm Doona. Let me look at your skin, then tell me your budget. I'll find what's missing.", true); };
 /* ── the companion's chat: typing is the main way in, the mic is optional ── */
 const chat = { open: false, mute: false, log: [] };
 function chatAdd(role, text) {
@@ -447,7 +448,13 @@ $('buddy-mic').onclick = toggleConvo;          // speak instead of typing
 $('talk').onclick = () => { chatOpen(true); $('buddy').classList.remove('away'); };
 addEventListener('keydown', e => { if (e.key === 'Escape' && chat.open) chatOpen(false); });
 // the companion follows you once the big one scrolls away
-new IntersectionObserver(([e]) => { $('buddy').classList.toggle('away', e.isIntersecting); }, { threshold: .25 }).observe($('stage'));
+const companionVisibility = new Map();
+const companionObserver = new IntersectionObserver(entries => {
+  for (const entry of entries) companionVisibility.set(entry.target, entry.isIntersecting);
+  $('buddy').classList.toggle('away', [...companionVisibility.values()].some(Boolean));
+}, { threshold: .2 });
+companionObserver.observe($('stage'));
+companionObserver.observe($('meet'));
 
 function syncControls() {
   document.querySelectorAll('[data-concern]').forEach(b => { const a = b.dataset.concern === state.concern; b.classList.toggle('active', a); b.setAttribute('aria-pressed', String(a)); });
@@ -553,6 +560,11 @@ function build(scroll = true) {
       e.target.setAttribute('aria-pressed', String(on));
       totals();
     };
+    const alternatives = document.createElement('button');
+    alternatives.className = 'ed-alternatives';
+    alternatives.textContent = 'Compare alternatives';
+    alternatives.onclick = () => document.dispatchEvent(new CustomEvent('compare-alternatives', { detail: p }));
+    a.append(alternatives);
     $('products').append(a);
   });
 
@@ -733,7 +745,6 @@ $('chat-form').onsubmit = e => { e.preventDefault(); const t = $('message').valu
 document.querySelectorAll('[data-prompt]').forEach(b => b.onclick = () => converse(b.dataset.prompt));
 
 /* ── scan ─────────────────────────────────────────────────────────────── */
-let keepStream = false;   // set when a read hands the camera on to the live tags
 function stopCamera() {
   scanGeneration++;
   if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
@@ -741,34 +752,39 @@ function stopCamera() {
   $('scan-view').classList.remove('scanning'); $('start-scan').disabled = false;
   stopLive();
 }
-$('open-scan').onclick = () => {
+function openSkinCheck() {
+  stopCamera();
   $('scan-status').textContent = 'Camera off';
-  $('scan-info').textContent = 'Turn on your camera, face the light, hold still for a second.';
-  $('camera-note').textContent = 'Three frames go to the SYNC read service. Nothing is stored by this page.';
-  $('camera-button').disabled = false; $('start-scan').disabled = false; $('scan-view').classList.remove('scanning');
-  document.querySelector('.scan-actions').hidden = false;
+  $('camera-note').textContent = 'Scanning sends three camera frames to the analysis service.';
+  $('camera-button').hidden = false; $('camera-button').disabled = false;
+  $('start-scan').hidden = true;
   $('scan-dialog').showModal();
-  if (stream) { $('camera').srcObject = stream; $('camera').hidden = false; $('scan-sample').hidden = true; $('scan-status').textContent = 'Camera on'; $('camera-button').disabled = true; }
-  else $('camera-button').onclick();      // no extra tap — the scan opens looking at you
-};
+}
+$('open-scan').onclick = openSkinCheck;
 $('close-scan').onclick = () => $('scan-dialog').close();
-$('scan-dialog').addEventListener('close', () => { if (keepStream) { keepStream = false; return; } if (!state.read || state.read.sample) stopCamera(); });
-
+$('scan-dialog').addEventListener('close', stopCamera);
 $('camera-button').onclick = async () => {
-  if (!navigator.mediaDevices?.getUserMedia) { $('camera-note').textContent = 'Camera is unavailable here. You’ll get a sample read.'; return; }
-  const gen = scanGeneration; $('camera-button').disabled = true;
+  const gen = scanGeneration;
+  $('camera-button').disabled = true;
   try {
-    const incoming = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } }, audio: false });
-    if (gen !== scanGeneration || !$('scan-dialog').open) { incoming.getTracks().forEach(t => t.stop()); return; }
-    stream = incoming; $('camera').srcObject = stream; $('camera').hidden = false; $('scan-sample').hidden = true;
-    $('scan-status').textContent = 'Camera on';
-  } catch { $('camera-note').textContent = 'Camera access was not available. You’ll get a sample read.'; $('camera-button').disabled = false; }
+    const incoming = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
+    if(gen !== scanGeneration || !$('scan-dialog').open) {incoming.getTracks().forEach(t=>t.stop()); return;}
+    stream = incoming; $('camera').srcObject = incoming;
+    $('camera').hidden = false; $('scan-sample').hidden = true;
+    $('camera-button').hidden = true; $('start-scan').hidden = false;
+    $('scan-status').textContent = 'Center your face';
+  } catch {
+    if(gen !== scanGeneration || !$('scan-dialog').open) return;
+    $('camera-button').disabled = false;
+    $('scan-status').textContent = 'Camera unavailable';
+    $('camera-note').textContent = 'Allow camera access, try the sample, or choose your goal.';
+  }
 };
-
 function grabFrame() {
   const v = $('camera'); if (!stream || !v.videoWidth) return null;
-  const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight;
-  c.getContext('2d').drawImage(v, 0, 0);
+  const s = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight));
+  const c = document.createElement('canvas'); c.width = Math.round(v.videoWidth * s); c.height = Math.round(v.videoHeight * s);
+  c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
   return c.toDataURL('image/jpeg', .9);
 }
 
@@ -783,42 +799,40 @@ async function analyze(frames) {
 
 $('start-scan').onclick = async () => {
   const gen = scanGeneration;
-  $('scan-view').classList.add('scanning'); $('start-scan').disabled = true; $('camera-button').disabled = true;
-  let read = null, note = '';
-  const frames = [];
-  if (stream) {
-    $('scan-status').textContent = 'Hold still…';
-    for (let i = 0; i < 3; i++) { const f = grabFrame(); if (f) frames.push(f); await new Promise(r => setTimeout(r, 350)); }
+  const active = () => gen === scanGeneration && $('scan-dialog').open;
+  $('start-scan').disabled = true; $('scan-view').classList.add('scanning');
+  $('scan-status').textContent = 'Hold still…';
+  try {
+    const frames = [];
+    for(let i=0;i<3;i++) {
+      if(!active()) return;
+      const frame = grabFrame();
+      if(!frame) throw Error('The camera isn’t ready. Try again in a moment.');
+      frames.push(frame);
+      await new Promise(resolve=>setTimeout(resolve,220));
+    }
+    if(!active()) return;
+    $('scan-status').textContent = 'Finding your focus…';
+    const response = await analyze(frames).catch(()=>{throw Error('Live analysis is unavailable. Try the sample or choose your goal.');});
+    if(!active()) return;
+    if(response.quality?.usable === false) throw Error('Try brighter lighting and face the camera.');
+    const scores = Object.fromEntries(Object.entries(response.scores || {}).filter(([key,entry]) =>
+      Object.hasOwn(AXIS_WEIGHT,key) && Number.isFinite(entry?.value) && entry.value>=0 && entry.value<=100
+    ).map(([key,entry])=>[key,entry.value]));
+    if(!Object.keys(scores).length) throw Error('No usable read. Try again or choose your goal.');
+    finishSkinCheck({scores,sample:false});
+  } catch(error) {
+    if(active()) { $('scan-status').textContent='Scan incomplete'; $('camera-note').textContent=error.message; }
+  } finally {
+    if(active()) { $('start-scan').disabled=false; $('scan-view').classList.remove('scanning'); }
   }
-  if (frames.length) {
-    $('scan-status').textContent = 'Reading · about 10 seconds';
-    try {
-      const r = await analyze(frames);
-      if (r.quality && r.quality.usable === false) note = `Couldn’t get a clear read (${r.quality.reason || 'face not clear'}). This is a sample.`;
-      else read = {
-        sample: false,
-        scores: Object.fromEntries(Object.entries(r.scores).map(([k, v]) => [k, Math.round(v.value)])),
-        regions: r.regions || {}, diagnosis: r.diagnosis, skin_type: r.skin_type, age_range: r.age_range,
-        fitzpatrick: r.fitzpatrick, top_concern: r.top_concern,
-      };
-    } catch { note = 'The read service isn’t reachable. This is a sample.'; }
-  } else note = 'No camera, so this is a sample.';
-  if (gen !== scanGeneration) return;
-  if (!read) read = SAMPLE_READ;
-  state.read = read; state.override = false;
-  state.concern = AXIS_FOCUS[targetAxes()[0].axis] || 'Hydration'; syncControls();
-
-  keepStream = !!stream && !read.sample;
-  $('scan-dialog').close();
-  renderRead(read, read.sample ? 'assets/sample_face.jpg' : frames[frames.length - 1], read.sample ? null : stream);
-  build(false);
-  if (note) toast(note);
-  const sc = syncScore(read.scores), top = targetAxes()[0];
-  voice.history = [];
-  say(`${sc}. You’re ${band(sc).toLowerCase()}. ${capital(AXIS_WORD[top.axis])} is the one asking${top.fix ? '' : ', and even that’s fine'}. I picked for that. Ask me anything.`, true);
-  voice.convo = true;
-  $('read').scrollIntoView({ behavior: 'smooth' });
 };
+function finishSkinCheck(read) {
+  $('scan-dialog').close();
+  document.dispatchEvent(new CustomEvent('skin-check-finished',{detail:read}));
+}
+$('sample-scan').onclick = () => finishSkinCheck(SAMPLE_READ);
+$('skip-scan').onclick = () => finishSkinCheck(null);
 $('read-to-picks').onclick = () => $('routine').scrollIntoView({ behavior: 'smooth' });
 $('read-again').onclick = () => $('open-scan').click();
 $('read-camera-off').onclick = () => { stopCamera(); $('read-camera-off').hidden = true; };
@@ -841,7 +855,7 @@ $('close-bag').onclick = $('back-routine').onclick = () => $('bag-dialog').close
 window.addEventListener('pagehide', () => { stopCamera(); if ('speechSynthesis' in window) speechSynthesis.cancel(); });
 
 /* ── boot ─────────────────────────────────────────────────────────────── */
-fetch('data/oy_catalog.json').then(r => r.json()).then(d => { catalog = d.products; }).catch(() => toast('Couldn’t load the product list. Serve this folder over http, not file://.'));
+fetch('data/oy_catalog.json').then(r => r.json()).then(d => { catalog = d.products; document.dispatchEvent(new Event('catalog-ready')); }).catch(() => { document.dispatchEvent(new Event('catalog-error')); toast('Couldn’t load the product list. Reload to try again.'); });
 syncControls();
 
 if (document.modelContext?.registerTool) {

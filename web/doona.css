@@ -1,0 +1,208 @@
+:root{--doona-ink:#1e1522;--doona-pink:#ff549e;--doona-lime:#dbfa54}
+body{background:#fffdf9}
+.edit-nav{width:min(92%,1440px);min-height:73px;gap:clamp(30px,7vw,100px);color:var(--doona-ink)}
+.doona-logo{font:900 34px/.95 Arial,sans-serif;letter-spacing:-2.8px;white-space:nowrap;display:inline-flex;align-items:flex-start}
+.doona-logo span{font-size:25px;line-height:.95;letter-spacing:0;color:#c0eb16;text-shadow:.5px .5px #536019;margin-left:2px}
+.meet-link{font-weight:700}.edit-account #routine-nav{background:#242024;color:#fff;border-color:#242024}
+.doona-hero{--sky:#ffdae6;--spot:#ff9fc7;--burst:#fdffb0;--accent:#e54689;position:relative;isolation:isolate;overflow:hidden;background-color:var(--sky);color:var(--doona-ink);border-block:1px solid #30202c;transition:background-color .35s}
+.doona-hero[data-look=track]{--sky:#eaf3bc;--spot:#c1e68b;--burst:#fff7ae;--accent:#71943b}
+.doona-hero[data-look=silver]{--sky:#e0defc;--spot:#bfb8fc;--burst:#fff7c4;--accent:#8873c8}
+.doona-hero[data-look=denim]{--sky:#d9edfc;--spot:#accde9;--burst:#ffdfac;--accent:#668eb7}
+.doona-hero[data-look=beret]{--sky:#f4d7ef;--spot:#dda9d7;--burst:#ffd7af;--accent:#a16094}
+.doona-inside{max-width:1500px;margin:auto;min-height:570px;display:grid;grid-template-columns:46% 54%;position:relative;padding-inline:clamp(22px,5vw,80px)}
+.doona-copy{position:relative;align-self:center;padding:36px 0 33px;z-index:2;pointer-events:none}
+.doona-copy button{pointer-events:auto}.doona-eyebrow,.wardrobe-head span:last-child,.match-top{font:600 12px/1.4 'IBM Plex Mono',monospace;letter-spacing:.065em}
+.doona-eyebrow{display:inline-flex;align-items:center;gap:8px}.doona-eyebrow span{color:#c92b75;font-size:18px}
+.doona-hero h1{font-family:Arial,Helvetica,sans-serif;font-weight:850;font-size:clamp(88px,8.6vw,142px);line-height:.83;letter-spacing:-.088em;margin:22px 0 21px;color:var(--doona-ink)}
+.doona-hero h1 em{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:700;letter-spacing:-.095em;line-height:.98}
+.doona-hero h1 em span{color:#e33381;margin:0}
+.doona-copy>p{max-width:380px;margin:0;font-size:clamp(16px,1.27vw,21px);line-height:1.45;letter-spacing:-.016em}
+.wardrobe{width:max-content;max-width:100%}.wardrobe-head{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:7px}.wardrobe-head span:first-child{font-size:14px;font-weight:bold}.wardrobe-head span:last-child{font-size:12px;letter-spacing:0;color:#56434f}
+.wardrobe-list{display:flex;gap:8px}.wardrobe-list button{width:49px;height:49px;border:1px solid #a28794;border-radius:11px;background:#fff9fc;overflow:hidden;position:relative;padding:0;transition:transform .18s}
+.wardrobe-list button img{position:absolute;max-width:none;width:193%;left:-47%;top:1px;pointer-events:none}
+.wardrobe-list button[aria-pressed=true]{border:2px solid var(--doona-ink);box-shadow:2px 2px 0 var(--doona-ink);background:#f5ffab}.wardrobe-list button:hover{transform:translateY(-3px)}
+.doona-stage{position:relative;align-self:stretch;isolation:isolate;min-width:0;--dx:0px;--dy:0px}
+.stage-grid{position:absolute;inset:0 -10% 0 -15%;background:radial-gradient(circle,var(--accent) 1.2px,transparent 1.6px);background-size:9px 9px;opacity:.33;mask-image:radial-gradient(ellipse at 74% 57%,#000 12%,transparent 69%);pointer-events:none}
+.doona-burst{position:absolute;inset:8% -2% 1% -4%;background:var(--burst);clip-path:polygon(52% 0,57% 26%,74% 4%,69% 32%,94% 19%,78% 42%,100% 43%,82% 52%,98% 69%,74% 64%,84% 87%,62% 72%,63% 100%,51% 79%,33% 100%,36% 72%,10% 85%,26% 63%,0 60%,24% 48%,4% 29%,31% 35%,23% 9%,42% 29%);transform:rotate(-7deg) translate(calc(var(--dx) * -.3),0);pointer-events:none}
+.doona-stage::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 52% 57%,var(--spot),transparent 66%)}
+.doona-sticker{position:absolute;z-index:3;left:3%;top:27%;transform:rotate(-13deg);font:italic 800 clamp(38px,4.6vw,70px)/.88 Georgia,serif;letter-spacing:-.085em;color:#fffdf8;-webkit-text-stroke:1.4px #251a24;paint-order:stroke fill;text-shadow:2.5px 3px #251a24;pointer-events:none}
+.doona-sticker em{color:var(--doona-lime)}.doona-spark{position:absolute;z-index:1;pointer-events:none;line-height:1}.spark-a{font-size:54px;color:#eb4384;right:5%;top:15%;transform:rotate(9deg)}.spark-b{font-size:55px;left:2%;bottom:18%;color:#33272c}
+.doona-dialogue{position:absolute;z-index:4;right:-2%;bottom:11%;width:max-content;max-width:205px;text-align:left;background:#fffdf8;border:1.5px solid var(--doona-ink);border-radius:16px 16px 16px 3px;box-shadow:3px 3px var(--doona-ink);padding:13px 14px;display:flex;align-items:flex-start;gap:8px;transform:rotate(3deg);font:600 15px/1.25 Arial,sans-serif}
+.speech-dot{width:8px;height:8px;flex:0 0 8px;margin-top:4px;border:1px solid #40342c;border-radius:50%;background:var(--doona-lime)}
+.room-figure img, .room-figure canvas {height:100%;width:100%;object-fit:contain;position:absolute;inset:0}
+.room-figure canvas {opacity:0;pointer-events:none}
+.room-figure.mesh-ready canvas {opacity:1}
+.room-figure.mesh-ready img {opacity:0}
+.room-figure:not(.mesh-ready):not(.motion-paused) {transform:perspective(650px) rotateY(var(--look-x,0deg));transition:transform .16s ease-out}
+.room-figure:not(.mesh-ready):not(.motion-paused) img {animation:doona-idle 4s ease-in-out infinite;transform-origin:50% 82%}
+@keyframes doona-idle {0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1.5deg) translateY(-5px)}}
+
+#room-progress {display:flex;align-items:center;justify-content:center;gap:5px;margin:8px 0 12px}
+#room-step {margin-right:4px; font-size:13px; color:#604b59}
+#room-progress i {width:17px;height:4px;border-radius:4px;background:#ad98ae}
+#room-progress i:first-of-type, [data-scene=budget] #room-progress i {background:#523b57}
+#room-choices {display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;margin:20px auto 0}
+#room-choices button {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:47px;
+  border:1px solid #5e456a42; border-radius:30px; background:#fffaf4e8; color:var(--doona-ink);
+  padding:12px 19px; font-weight:600; transition:transform .16s,background .16s;
+}
+#room-choices button:hover {transform:translateY(-2px); background:white}
+#room-choices button.room-primary {background:#332535; color:white; border-color:#332535; box-shadow:0 4px 0 #21152019}
+[data-scene=hello] #room-choices .room-primary {padding-inline:30px}
+.choice-mark {font-size:18px; line-height:1; color:#986a93}
+.mark-wave {font-size:20px}
+.mark-drop {display:inline-block;background:#7aaac8;width:12px;height:15px;border-radius:70% 15% 65% 65%;transform:rotate(-32deg)}
+.mark-spark {color:#ad790c}
+.mark-save {color:inherit}
+#room-back {background:none;border:0;color:#58475d;text-decoration:underline;text-underline-offset:3px;padding:11px 16px;font-size:14px}
+#room-result {width:min(100%,420px); margin:auto}
+.pick-ticket {display:flex; align-items:center; gap:15px; margin:15px auto 0; border:1px solid #fff8; border-radius:20px; background:#fffcf6eb; padding:11px 17px 11px 11px; text-align:left; width:100%; color:var(--doona-ink)}
+.pick-ticket img {width:64px;height:64px;border-radius:12px;object-fit:cover}
+.pick-ticket strong,.pick-ticket small,.pick-ticket span span {display:block}
+.pick-ticket small,.pick-ticket span span {color:#604b59;font-size:13px}
+.pick-ticket strong {font-size:17px; margin:4px 0}
+#room-result p {font-size:14px; margin:8px 0; color:#604b59;line-height:1.4}
+
+.meeting-doona .buddy:not(.chatting) {visibility:hidden}
+.buddy.away.chatting {opacity:1;transform:none;pointer-events:auto}
+#studio[hidden]+.hero,#studio[hidden]~.ticker,#studio[hidden]~.conversation {display:none}
+.mood-particle {
+  position:absolute; z-index:3; pointer-events:none; opacity:0; font:600 26px/1 Georgia,serif;
+  animation:mood-float 900ms cubic-bezier(.18,.65,.32,1) both;
+}
+.mood-Hydration {color:#6caec6;font-size:16px}
+.mood-Comfort {color:#b55b82}
+.mood-Glow {color:#a47628}
+@keyframes mood-float {
+  0% {opacity:0;transform:translateY(6px) scale(.5)}
+  25% {opacity:1}
+  100% {opacity:0;transform:translateY(-40px) scale(1.13)}
+}
+@media(prefers-reduced-motion:no-preference) {
+  .doona-hero:not(:has(.motion-paused)) #room-choices button {animation:reply-in .22s ease-out backwards}
+  #room-choices button:nth-child(2) {animation-delay:35ms}
+  #room-choices button:nth-child(3) {animation-delay:70ms}
+}
+@keyframes reply-in {from{opacity:0;translate:0 4px}to{opacity:1;translate:0 0}}
+
+
+.edit-nav {
+  position:absolute; inset:0 0 auto; z-index:8; width:auto; margin:0;
+  min-height:64px; justify-content:space-between; padding:10px clamp(18px,4vw,72px);
+  pointer-events:none;
+}
+.edit-nav > * {pointer-events:auto}
+#menu-toggle {
+  display:grid;place-items:center;width:44px;height:44px;padding:0;border:1.5px solid var(--doona-ink);
+  border-radius:50%;background:#fffaf4;font-size:20px;color:var(--doona-ink);
+}
+.edit-nav #room-menu {
+  display:none;position:absolute;right:clamp(12px,4vw,72px);top:calc(100% - 5px);
+  width:min(294px,calc(100vw - 24px)); max-height:calc(100svh - 74px);overflow:auto;
+  padding:13px;border:1.5px solid var(--doona-ink);border-radius:16px;
+  box-shadow:3px 4px var(--doona-ink); background:#fffaf5;
+}
+.edit-nav #room-menu.is-open {display:grid;gap:2px}
+.edit-nav #room-menu a,.edit-nav #room-menu a:first-child {display:block;padding:9px 7px}
+#room-menu .edit-account {margin:3px 0;justify-content:space-between;gap:8px}
+#room-menu .wardrobe {margin:12px 0 4px;padding:12px 0;border-block:1px solid #d7c7cf;width:100%}
+#room-menu .wardrobe-list {gap:5px}
+#room-menu .wardrobe-list button {width:44px;height:44px}
+#motion-control {justify-self:start;border:0;background:none;text-decoration:underline;text-underline-offset:3px;padding:8px;font-size:14px}
+.edit-account #routine-nav #count {color:var(--doona-ink)}
+.doona-hero {border:0}
+.doona-inside {
+  min-height:100svh; width:min(100%,820px); padding:76px 18px 40px;
+  display:flex; flex-direction:column; align-items:center;justify-content:center;
+}
+.doona-stage {
+  width:min(100%,680px);height:clamp(200px,42svh,430px);flex:none;align-self:center;
+}
+[data-scene=hello] .doona-stage {height:clamp(270px,55svh,580px)}
+[data-scene=result] .doona-stage {height:clamp(140px,25svh,285px)}
+.room-figure {
+  position:absolute;z-index:2;bottom:0;left:50%;translate:-50% 0;aspect-ratio:1;height:100%;padding:0;
+  border:0;background:transparent;mask-image:linear-gradient(#000 0 92%,transparent);
+}
+.stage-grid {inset:-15% -24% -2%;mask-image:radial-gradient(ellipse,#000 12%,transparent 70%)}
+.doona-burst {inset:4% 1% 0;transform:rotate(-6deg)}
+.doona-spark.spark-a {right:8%;top:10%}.doona-spark.spark-b {left:8%;bottom:9%}
+.doona-dialogue {pointer-events:none;right:2%;bottom:18%}
+.doona-copy {
+  width:min(100%,550px);align-self:center;padding:0;text-align:center;pointer-events:auto;
+}
+.doona-hero h1,.doona-hero[data-scene=hello] h1 {
+  margin:7px 0 0;font:750 clamp(31px,4.1vw,62px)/1.04 Arial,sans-serif;
+  letter-spacing:-.067em;text-wrap:balance;outline:none;
+}
+.doona-hero h1 em {display:inline;font-weight:700}
+#room-choices,#room-progress {justify-content:center}
+#room-progress {margin:7px 0}
+#room-step {position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
+#room-caption {margin:7px auto 0;color:#604b59;font-size:15px}
+#room-choices {margin:16px 0 0;gap:8px}
+#room-choices button {
+  border:1.5px solid var(--doona-ink);border-radius:12px;box-shadow:2px 3px var(--doona-ink);
+  background:#fffaf5;color:var(--doona-ink);
+}
+#room-choices button.room-primary {background:var(--doona-lime);color:var(--doona-ink);border-color:var(--doona-ink);box-shadow:3px 4px var(--doona-ink)}
+#room-choices button:active {translate:1px 2px;box-shadow:none}
+.pick-ticket {background:#fffdf8;border:1.5px solid var(--doona-ink);box-shadow:2px 3px var(--doona-ink)}
+@media(max-width:620px) {
+ .edit-nav {min-height:58px}.doona-logo {font-size:27px}
+ .doona-inside {padding:64px 16px 36px}
+ .doona-stage {height:min(35svh,78vw)}
+ [data-scene=hello] .doona-stage {height:min(48svh,100vw)}
+ [data-scene=result] .doona-stage {height:min(23svh,57vw)}
+ .doona-spark.spark-a,.doona-spark.spark-b {font-size:32px}
+ .doona-dialogue {font-size:13px;max-width:115px}
+ #room-choices button {padding:11px 15px;min-height:44px}
+}
+@media(prefers-reduced-motion:reduce) {
+ html {scroll-behavior:auto}
+ .doona-hero,.room-figure:not(.mesh-ready) img,#room-choices button {animation:none;transition:none}
+}
+
+/* Leave the shelf within one scroll of the avatar, including on small screens. */
+.doona-inside {min-height:88svh;padding-bottom:58px}
+.shelf-jump {position:absolute;bottom:12px;left:50%;translate:-50% 0;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;font-size:14px;white-space:nowrap}
+.shelf-jump:hover {text-decoration:underline}
+#discover {padding-block:clamp(38px,6vw,80px) 40px}
+#discover .ed-head {align-items:center;gap:16px;margin-bottom:20px}
+#discover .ed-head h2 {font-size:clamp(36px,4.4vw,70px);margin:0;letter-spacing:-.065em}
+#discover .ed-head h2 span {color:#e33381}
+.shelf-filters {border-bottom:1px solid #dfd9de;padding:4px 0 10px}
+.shelf-filters summary {width:max-content;cursor:pointer;font-size:14px;font-weight:600;padding:8px 0}
+.shelf-filters .ed-toolbar {border:none;margin:3px 0 0}
+#discover .ed-summary {align-items:center;gap:12px}
+#edit-compare {margin-left:auto}
+.card-ingredient {margin:5px 0 8px;font-size:14px;line-height:1.35;color:#614e5c}
+.ingredient-index {padding:24px 0 12px}
+.ingredient-index h3 {font-size:clamp(24px,2.8vw,38px);letter-spacing:-.055em;margin:0 0 16px}
+#ingredient-links {display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+#ingredient-links button {border:1px solid #d8ccd7;border-radius:14px;background:#f8efef;display:grid;grid-template-columns:66px 1fr;column-gap:12px;align-items:center;text-align:left;padding:12px}
+#ingredient-links button:nth-child(2) {background:#f0edfa}
+#ingredient-links button:nth-child(3) {background:#f2f4dc}
+#ingredient-links img {grid-row:span 2;width:66px;height:66px;border-radius:9px;object-fit:cover}
+#ingredient-links strong {align-self:end;font-size:17px}
+#ingredient-links small {align-self:start;margin-top:3px;font-size:14px;color:#5c4e5a}
+.price-limit {display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:16px 0}
+.price-limit label {display:grid;gap:4px;text-align:left;font-size:14px}
+.price-limit input,.price-limit button {border:1.5px solid var(--doona-ink);padding:10px;border-radius:8px;font-size:16px}
+.price-limit input {width:150px;background:white}
+.price-limit button {background:var(--doona-lime)}
+#scan-dialog {width:min(92vw,440px);max-height:90svh;overflow:auto}
+#scan-dialog h2 {margin-top:0}
+#scan-dialog .scan-view {height:clamp(150px,32svh,290px)}
+#camera-note {font-size:14px;line-height:1.5}
+.scan-options {display:flex;gap:16px;justify-content:center;margin-top:14px}
+.scan-options button {border:0;background:none;text-decoration:underline;text-underline-offset:3px;font-size:14px;padding:6px 2px}
+@media(max-width:720px) {
+  #ingredient-links {grid-template-columns:1fr}
+  #ingredient-links button {grid-template-columns:55px 1fr}
+  #ingredient-links img {width:55px;height:55px}
+  #discover .ed-head {flex-direction:column;align-items:stretch}
+  #discover .ed-search {width:100%}
+  .doona-inside {min-height:90svh}
+}
